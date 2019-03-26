@@ -29,11 +29,15 @@ public class ChapterReaderAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public int getCount() {
-        return imgUrl == null ? 0 : imgUrl.size();
+        return imgUrl == null ? 1 : imgUrl.size() + 1;
     }
 
     @Override
     public Fragment getItem(final int position) {
+        // TODO Ajouter un new fragment pour : if(position==imgUrl.size()+1)
+        if (position == imgUrl.size()) {
+            return ChapterPageFragment.newInstance(position, "");
+        }
         return ChapterPageFragment.newInstance(position, imgUrl.get(position));
     }
 
@@ -69,13 +73,14 @@ public class ChapterReaderAdapter extends FragmentStatePagerAdapter {
             if (!mPage.equals("")) {
                 view = inflater.inflate(R.layout.fragment_pager_list, container, false);
                 final PhotoView imageView = view.findViewById(R.id.imgShow);
+
                 Glide.with(this).load(mPage).into(imageView);
             } else {
-                //TODO WIP
+                //TODO WIP CHAPTER
                 view = inflater.inflate(R.layout.last_element, container, false);
                 final ListView listView = view.findViewById(R.id.fs_view_chapter_list);
 
-                final ArrayList<String> data = new ArrayList<>(Arrays.asList("TMP", "TMP2", "TMP3"));
+                final ArrayList<String> data = new ArrayList<>(Arrays.asList("Chap1", "Chap2", "Chap3"));
                 final ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_2, android.R.id.text1, data);
 
 
