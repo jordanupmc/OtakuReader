@@ -8,6 +8,20 @@
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true">
 
+        <ProgressBar
+            android:id="@+id/pbChapterAdapter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <Button
+            android:id="@+id/btnRefresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            android:text="Refresh" />
+
         <com.github.chrisbanes.photoview.PhotoView
             android:id="@+id/imgShow"
             android:layout_width="match_parent"
