@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">OtakuReader</string>
+    <string name="title_activity_chapter_select">ChapterSelectActivity</string>
 </resources>

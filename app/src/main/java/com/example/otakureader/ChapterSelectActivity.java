@@ -1,0 +1,92 @@
+package com.example.otakureader;
+
+import android.content.Intent;
+import android.os.Bundle;
+
+import com.example.otakureader.mangaeden.RetrofitBuilder;
+import com.example.otakureader.tools.adapters.ChapterAdapter;
+import com.example.otakureader.mangaeden.pojo.MangaPOJO;
+import com.example.otakureader.tools.Chapter;
+
+import androidx.appcompat.app.AppCompatActivity;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
+
+import static com.example.otakureader.FullscreenView.CHAPTER_ID;
+
+public class ChapterSelectActivity extends AppCompatActivity {
+
+    public final static String mangaId = "mangaId";
+
+    private List<Chapter> chapters;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_chapter_select);
+        chapters = new ArrayList<>();
+        Intent myIntent = getIntent();
+        String mId = myIntent.getStringExtra(mangaId);
+
+        RetrofitBuilder.getApi().getManga(mId).enqueue(
+                new Callback<MangaPOJO>() {
+                    @Override
+                    public void onResponse(Call<MangaPOJO> call, Response<MangaPOJO> response) {
+                        List<List<String>> chaps = response.body().getChapters();
+                        for (int i = 0; i < chaps.size(); i++) {
+                            int chapNb = Integer.parseInt(chaps.get(i).get(0));
+
+                            String tmpDate = chaps.get(i).get(1);
+                            tmpDate = tmpDate.substring(0, tmpDate.length()-2)+"000";
+
+                            Date date = new Date(Long.parseLong(tmpDate));
+                            SimpleDateFormat sdf;
+                            sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.FRANCE);
+                            sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+
+                            String chapDate = sdf.format(date);
+                            String chapTitle = chaps.get(i).get(2);
+                            String chapId = chaps.get(i).get(3);
+                            chapters.add(new Chapter(chapNb, chapDate, chapTitle, chapId));
+                        }
+                        final ArrayAdapter<Chapter> adapter = new ChapterAdapter(
+                                ChapterSelectActivity.this,
+                                R.layout.content_chapter,
+                                chapters);
+
+                        ProgressBar pb = findViewById(R.id.chapProgressBar);
+                        pb.setVisibility(View.GONE);
+
+                        ListView lv = findViewById(R.id.chapListView);
+                        lv.setVisibility(View.VISIBLE);
+
+                        lv.setOnItemClickListener((adapterView, view, position, l) -> {
+                            final Intent intent = new Intent(ChapterSelectActivity.this, FullscreenView.class);
+                            intent.putExtra(CHAPTER_ID,chapters.get(position).getId());
+                            startActivity(intent);
+                        });
+
+                        lv.setAdapter(adapter);
+                    }
+
+                    @Override
+                    public void onFailure(Call<MangaPOJO> call, Throwable t) {
+                        Log.e("FullScreenView", "API CALL CHAPTER ERROR");
+                    }
+                });
+    }
+}

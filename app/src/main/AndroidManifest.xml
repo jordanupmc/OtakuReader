@@ -13,6 +13,10 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity
+            android:name=".ChapterSelectActivity"
+            android:label="@string/title_activity_chapter_select"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".FullscreenView" />
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -21,8 +25,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
     </application>
 
 </manifest>
