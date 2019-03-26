@@ -2,12 +2,13 @@ package com.example.otakureader;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 
 import java.util.Arrays;
 import java.util.List;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
 public class FullscreenView extends AppCompatActivity {
 
@@ -26,25 +27,14 @@ public class FullscreenView extends AppCompatActivity {
         System.out.println(myIntent.getStringExtra(CHAPTER_ID));
     }
 
-    private static List<Integer> getExampleChapterRessource() {
+    private static List<String> getExampleChapterRessource() {
         return Arrays.asList(
-                R.drawable.o00,
-                R.drawable.o01,
-                R.drawable.o02,
-                R.drawable.o04,
-                R.drawable.o05,
-                R.drawable.o06,
-                R.drawable.o07,
-                R.drawable.o08,
-                R.drawable.o09,
-                R.drawable.o10,
-                R.drawable.o11,
-                R.drawable.o12,
-                R.drawable.o13,
-                R.drawable.o14,
-                R.drawable.o15,
-                R.drawable.o16,
-                R.drawable.o17
+                "https://cdn.mangaeden.com/mangasimg/a1/a1b3bd00f7b68e96ecade3b93618babf9c43eecfc6f19c9561bc0e95.jpg",
+                "https://cdn.mangaeden.com/mangasimg/a1/a1b3bd00f7b68e96ecade3b93618babf9c43eecfc6f19c9561bc0e95.jpg",
+                "https://cdn.mangaeden.com/mangasimg/a1/a1b3bd00f7b68e96ecade3b93618babf9c43eecfc6f19c9561bc0e95.jpg",
+                "https://cdn.mangaeden.com/mangasimg/a1/a1b3bd00f7b68e96ecade3b93618babf9c43eecfc6f19c9561bc0e95.jpg",
+                "https://cdn.mangaeden.com/mangasimg/a1/a1b3bd00f7b68e96ecade3b93618babf9c43eecfc6f19c9561bc0e95.jpg",
+                ""
         );
     }
 }
