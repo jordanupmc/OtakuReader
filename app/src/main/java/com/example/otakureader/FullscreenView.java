@@ -1,5 +1,6 @@
 package com.example.otakureader;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +11,8 @@ import java.util.List;
 
 public class FullscreenView extends AppCompatActivity {
 
+    public static final String CHAPTER_ID = "chapterId";
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
@@ -17,9 +20,10 @@ public class FullscreenView extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen_view);
         final ChapterReaderAdapter mAdapter = new ChapterReaderAdapter(getSupportFragmentManager(), getExampleChapterRessource());
-
         final ViewPager mPager = findViewById(R.id.fullscreen_pager);
         mPager.setAdapter(mAdapter);
+        Intent myIntent = getIntent();
+        System.out.println(myIntent.getStringExtra(CHAPTER_ID));
     }
 
     private static List<Integer> getExampleChapterRessource() {
