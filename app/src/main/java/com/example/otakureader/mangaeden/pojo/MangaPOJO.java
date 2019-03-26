@@ -1,11 +1,11 @@
-package com.example.otakureader.mangaeden;
+package com.example.otakureader.mangaeden.pojo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Manga {
+public class MangaPOJO {
 
     @SerializedName("aka")
     @Expose
