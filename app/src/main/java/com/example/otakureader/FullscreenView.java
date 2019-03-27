@@ -2,9 +2,7 @@ package com.example.otakureader;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Window;
 
-import com.example.otakureader.R;
 import com.example.otakureader.mangaeden.RetrofitBuilder;
 import com.example.otakureader.mangaeden.pojo.ChapterPOJO;
 
@@ -24,18 +22,15 @@ public class FullscreenView extends AppCompatActivity {
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
-        getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
-        getSupportActionBar().hide();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen_view);
 
         Intent myIntent = getIntent();
-        System.out.println(myIntent.getStringExtra(CHAPTER_ID));
-        getExampleChapterPOJORessource();
+        getPagesFromChapter(myIntent.getStringExtra(CHAPTER_ID));
     }
 
-    private void getExampleChapterPOJORessource() {
-        RetrofitBuilder.getApi().getChapter("5bfad4c0719a162df4c7eb5e").enqueue(new Callback<ChapterPOJO>() {
+    private void getPagesFromChapter(String chapterId) {
+        RetrofitBuilder.getApi().getChapter(chapterId).enqueue(new Callback<ChapterPOJO>() {
             @Override
             public void onResponse(Call<ChapterPOJO> call, Response<ChapterPOJO> response) {
                 final List<String> ChapterPOJOs = new ArrayList<>();
