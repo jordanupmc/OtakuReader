@@ -34,7 +34,8 @@ public class FullscreenView extends AppCompatActivity {
             @Override
             public void onResponse(Call<ChapterPOJO> call, Response<ChapterPOJO> response) {
                 final List<String> ChapterPOJOs = new ArrayList<>();
-                for (int i = 0; i < response.body().getImages().size(); i++) {
+
+                for (int i = 0; response.body().getImages() != null && i < response.body().getImages().size(); i++) {
                     ChapterPOJOs.add("https://cdn.mangaeden.com/mangasimg/" + response.body().getImages().get(i).get(1));
                 }
                 Collections.reverse(ChapterPOJOs);
