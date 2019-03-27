@@ -20,6 +20,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,7 +54,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
                             String chapNb = chaps.get(i).get(0);
 
                             String tmpDate = chaps.get(i).get(1);
-                            tmpDate = tmpDate.substring(0, tmpDate.length()-2)+"000";
+                            tmpDate = tmpDate.substring(0, tmpDate.length() - 2) + "000";
 
                             Date date = new Date(Long.parseLong(tmpDate));
                             SimpleDateFormat sdf;
@@ -85,7 +86,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
 
                         lv.setOnItemClickListener((adapterView, view, position, l) -> {
                             final Intent intent = new Intent(ChapterSelectActivity.this, FullscreenView.class);
-                            intent.putExtra(CHAPTER_ID,chapters.get(position).getId());
+                            intent.putExtra(CHAPTER_ID, chapters.get(position).getId());
                             startActivity(intent);
                         });
 
@@ -94,6 +95,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<MangaDetailPOJO> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), "API CALL CHAPTER ERROR", Toast.LENGTH_LONG).show();
                         Log.e("FullScreenView", "API CALL CHAPTER ERROR");
                     }
                 });

@@ -34,12 +34,13 @@ public class FullscreenView extends AppCompatActivity {
             @Override
             public void onResponse(Call<ChapterPagesPOJO> call, Response<ChapterPagesPOJO> response) {
                 final List<String> ChapterPOJOs = new ArrayList<>();
-                for (int i = 0; i < response.body().getImages().size(); i++) {
+
+                for (int i = 0; response.body().getImages() != null && i < response.body().getImages().size(); i++) {
                     ChapterPOJOs.add("https://cdn.mangaeden.com/mangasimg/" + response.body().getImages().get(i).get(1));
                 }
                 Collections.reverse(ChapterPOJOs);
 
-                final ChapterReaderAdapter mAdapter = new ChapterReaderAdapter(getSupportFragmentManager(), ChapterPOJOs);
+                final ChapterReaderPagerAdapter mAdapter = new ChapterReaderPagerAdapter(getSupportFragmentManager(), ChapterPOJOs);
                 final ViewPager mPager = findViewById(R.id.fullscreen_pager);
                 mPager.setAdapter(mAdapter);
             }
