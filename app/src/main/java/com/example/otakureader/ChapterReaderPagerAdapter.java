@@ -65,9 +65,9 @@ public class ChapterReaderPagerAdapter extends FragmentStatePagerAdapter {
             final View view = inflater.inflate(R.layout.last_element, container, false);
             final ListView listView = view.findViewById(R.id.fs_view_chapter_list);
 
-            final ArrayList<Chapter> data = new ArrayList<>(Arrays.asList(new Chapter(0, "date", "NI TITLE", "NOID"),
-                    new Chapter(1, "date", "NI TITLE", "NOID"),
-                    new Chapter(2, "date", "NI TITLE", "NOID")));
+            final ArrayList<Chapter> data = new ArrayList<>(Arrays.asList(new Chapter("0", "date", "NI TITLE", "NOID"),
+                    new Chapter("1", "date", "NI TITLE", "NOID"),
+                    new Chapter("2", "date", "NI TITLE", "NOID")));
             final ArrayAdapter<Chapter> adapter = new ChapterAdapter(view.getContext(), R.layout.content_chapter, data);
             listView.setAdapter(adapter);
             final Button next = view.findViewById(R.id.nextChapterBtn);

@@ -12,7 +12,6 @@ import com.google.gson.GsonBuilder;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import static com.example.otakureader.ChapterSelectActivity.mangaId;
 import static com.example.otakureader.tools.LocalData.LOCAL_DATA;
 
 public class MainActivity extends AppCompatActivity {
