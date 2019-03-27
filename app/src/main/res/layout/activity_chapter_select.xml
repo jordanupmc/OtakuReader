@@ -6,17 +6,31 @@
     android:gravity="center_horizontal"
     tools:context=".ChapterSelectActivity">
 
-    <ProgressBar
-        android:id="@+id/chapProgressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:visibility="visible"/>
+        <ProgressBar
+            android:id="@+id/chapProgressBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:visibility="visible"/>
 
-    <ListView
-        android:id="@+id/chapListView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"></ListView>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+                <com.github.chrisbanes.photoview.PhotoView
+                    android:layout_margin="5dp"
+                    android:id="@+id/chapImage"
+                    android:layout_width="200dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:visibility="gone"/>
+
+                <ListView
+                    android:id="@+id/chapListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:visibility="gone"></ListView>
+        </LinearLayout>
 
 </LinearLayout>
