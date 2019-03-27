@@ -2,13 +2,13 @@ package com.example.otakureader.tools;
 
 public class Chapter {
     private static int cpt = 0;
-    private int number;
+    private String number;
     private String date;
     private String title;
     private String id;
     private int localId;
 
-    public Chapter(int number, String date, String title, String id) {
+    public Chapter(String number, String date, String title, String id) {
         this.number = number;
         this.date = date;
         this.title = title;
@@ -24,11 +24,11 @@ public class Chapter {
         Chapter.cpt = cpt;
     }
 
-    public int getNumber() {
+    public String getNumber() {
         return number;
     }
 
-    public void setNumber(int number) {
+    public void setNumber(String number) {
         this.number = number;
     }
 

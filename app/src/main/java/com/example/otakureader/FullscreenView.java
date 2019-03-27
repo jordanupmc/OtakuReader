@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.example.otakureader.mangaeden.RetrofitBuilder;
-import com.example.otakureader.mangaeden.pojo.ChapterPOJO;
+import com.example.otakureader.mangaeden.pojo.ChapterPagesPOJO;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,9 +30,9 @@ public class FullscreenView extends AppCompatActivity {
     }
 
     private void getPagesFromChapter(String chapterId) {
-        RetrofitBuilder.getApi().getChapter(chapterId).enqueue(new Callback<ChapterPOJO>() {
+        RetrofitBuilder.getApi().getChapter(chapterId).enqueue(new Callback<ChapterPagesPOJO>() {
             @Override
-            public void onResponse(Call<ChapterPOJO> call, Response<ChapterPOJO> response) {
+            public void onResponse(Call<ChapterPagesPOJO> call, Response<ChapterPagesPOJO> response) {
                 final List<String> ChapterPOJOs = new ArrayList<>();
                 for (int i = 0; i < response.body().getImages().size(); i++) {
                     ChapterPOJOs.add("https://cdn.mangaeden.com/mangasimg/" + response.body().getImages().get(i).get(1));
@@ -45,7 +45,7 @@ public class FullscreenView extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<ChapterPOJO> call, Throwable t) {
+            public void onFailure(Call<ChapterPagesPOJO> call, Throwable t) {
 
             }
         });

@@ -1,94 +1,105 @@
 package com.example.otakureader.mangaeden.pojo;
 
+import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
-
 public class MangaPOJO {
 
-    @SerializedName("aka")
-    @Expose
-    private List<String> aka = null;
-    @SerializedName("alias")
+    @SerializedName("a")
     @Expose
     private String alias;
-    @SerializedName("artist")
+
+    @SerializedName("c")
     @Expose
-    private String artist;
-    @SerializedName("author")
+    private List<String> category = null;
+
+    @SerializedName("h")
     @Expose
-    private String author;
-    @SerializedName("categories")
+    private long hits;
+
+    @SerializedName("i")
     @Expose
-    private List<String> categories = null;
-    @SerializedName("chapters")
-    @Expose
-    private List<List<String>> chapters = null;
-    @SerializedName("created")
-    @Expose
-    private double created;
-    @SerializedName("description")
-    @Expose
-    private String description;
-    @SerializedName("image")
+    private String id;
+
+    @SerializedName("im")
     @Expose
     private String image;
-    @SerializedName("released")
+
+    @SerializedName("ld")
     @Expose
-    private long released;
-    @SerializedName("status")
+    private double lastChapterDate;
+
+    @SerializedName("s")
     @Expose
     private long status;
-    @SerializedName("title")
+
+    @SerializedName("t")
     @Expose
     private String title;
 
-    public List<String> getAka() {
-        return aka;
-    }
 
     public String getAlias() {
         return alias;
     }
 
-    public String getArtist() {
-        return artist;
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
-    public String getAuthor() {
-        return author;
+    public List<String> getCategory() {
+        return category;
     }
 
-    public List<String> getCategories() {
-        return categories;
+    public void setCategory(List<String> category) {
+        this.category = category;
     }
 
-    public List<List<String>> getChapters() {
-        return chapters;
+    public long getHits() {
+        return hits;
     }
 
-    public double getCreated() {
-        return created;
+    public void setHits(long hits) {
+        this.hits = hits;
     }
 
-    public String getDescription() {
-        return description;
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getImage() {
         return image;
     }
 
-    public long getReleased() {
-        return released;
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public double getLastChapterDate() {
+        return lastChapterDate;
+    }
+
+    public void setLastChapterDate(double lastChapterDate) {
+        this.lastChapterDate = lastChapterDate;
     }
 
     public long getStatus() {
         return status;
     }
 
+    public void setStatus(long status) {
+        this.status = status;
+    }
+
     public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

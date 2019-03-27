@@ -1,13 +1,12 @@
 package com.example.otakureader;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
 import com.example.otakureader.mangaeden.RetrofitBuilder;
+import com.example.otakureader.mangaeden.pojo.MangaDetailPOJO;
 import com.example.otakureader.tools.adapters.ChapterAdapter;
-import com.example.otakureader.mangaeden.pojo.MangaPOJO;
 import com.example.otakureader.tools.Chapter;
 import com.github.chrisbanes.photoview.PhotoView;
 
@@ -19,7 +18,6 @@ import retrofit2.Response;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -34,7 +32,7 @@ import static com.example.otakureader.FullscreenView.CHAPTER_ID;
 
 public class ChapterSelectActivity extends AppCompatActivity {
 
-    public final static String mangaId = "mangaId";
+    public final static String MANGA_ID = "MANGA_ID";
 
     private List<Chapter> chapters;
 
@@ -44,15 +42,15 @@ public class ChapterSelectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chapter_select);
         chapters = new ArrayList<>();
         Intent myIntent = getIntent();
-        String mId = myIntent.getStringExtra(mangaId);
+        String mId = myIntent.getStringExtra(MANGA_ID);
 
         RetrofitBuilder.getApi().getManga(mId).enqueue(
-                new Callback<MangaPOJO>() {
+                new Callback<MangaDetailPOJO>() {
                     @Override
-                    public void onResponse(Call<MangaPOJO> call, Response<MangaPOJO> response) {
+                    public void onResponse(Call<MangaDetailPOJO> call, Response<MangaDetailPOJO> response) {
                         List<List<String>> chaps = response.body().getChapters();
                         for (int i = 0; i < chaps.size(); i++) {
-                            int chapNb = Integer.parseInt(chaps.get(i).get(0));
+                            String chapNb = chaps.get(i).get(0);
 
                             String tmpDate = chaps.get(i).get(1);
                             tmpDate = tmpDate.substring(0, tmpDate.length()-2)+"000";
@@ -68,7 +66,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
                             chapters.add(new Chapter(chapNb, chapDate, chapTitle, chapId));
                         }
 
-                        String imageUrl = getString(R.string.manga_image_link) + response.body().getImage();
+                        String imageUrl = getString(R.string.api_image_url) + response.body().getImage();
 
                         final ArrayAdapter<Chapter> adapter = new ChapterAdapter(
                                 ChapterSelectActivity.this,
@@ -95,7 +93,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<MangaPOJO> call, Throwable t) {
+                    public void onFailure(Call<MangaDetailPOJO> call, Throwable t) {
                         Log.e("FullScreenView", "API CALL CHAPTER ERROR");
                     }
                 });

@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">OtakuReader</string>
     <string name="title_activity_chapter_select">ChapterSelectActivity</string>
-    <string name="manga_image_link">https://cdn.mangaeden.com/mangasimg/</string>
+    <string name="api_image_url">https://cdn.mangaeden.com/mangasimg/</string>
 </resources>
