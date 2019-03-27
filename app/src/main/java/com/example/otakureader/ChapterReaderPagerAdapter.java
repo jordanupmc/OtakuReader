@@ -16,6 +16,8 @@ import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
+import com.example.otakureader.tools.Chapter;
+import com.example.otakureader.tools.adapters.ChapterAdapter;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.ArrayList;
@@ -30,11 +32,11 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import static com.example.otakureader.FullscreenView.CHAPTER_ID;
 
-public class ChapterReaderAdapter extends FragmentStatePagerAdapter {
+public class ChapterReaderPagerAdapter extends FragmentStatePagerAdapter {
 
     public List<String> imgUrl;
 
-    public ChapterReaderAdapter(final FragmentManager fm, final List<String> imgUrl) {
+    public ChapterReaderPagerAdapter(final FragmentManager fm, final List<String> imgUrl) {
         super(fm);
         this.imgUrl = imgUrl;
     }
@@ -63,8 +65,10 @@ public class ChapterReaderAdapter extends FragmentStatePagerAdapter {
             final View view = inflater.inflate(R.layout.last_element, container, false);
             final ListView listView = view.findViewById(R.id.fs_view_chapter_list);
 
-            final ArrayList<String> data = new ArrayList<>(Arrays.asList("Chap1", "Chap2", "Chap3"));
-            final ArrayAdapter<String> adapter = new ArrayAdapter<String>(view.getContext(), android.R.layout.simple_list_item_2, android.R.id.text1, data);
+            final ArrayList<Chapter> data = new ArrayList<>(Arrays.asList(new Chapter(0, "date", "NI TITLE", "NOID"),
+                    new Chapter(1, "date", "NI TITLE", "NOID"),
+                    new Chapter(2, "date", "NI TITLE", "NOID")));
+            final ArrayAdapter<Chapter> adapter = new ChapterAdapter(view.getContext(), R.layout.content_chapter, data);
             listView.setAdapter(adapter);
             final Button next = view.findViewById(R.id.nextChapterBtn);
             next.setOnClickListener(v -> {
@@ -97,7 +101,7 @@ public class ChapterReaderAdapter extends FragmentStatePagerAdapter {
         public void onCreate(final Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             mNum = getArguments() != null ? getArguments().getInt("num") : 1;
-            mPage = getArguments() != null ? getArguments().getString("page") : ""; //TODO Placeholder if not found ?
+            mPage = getArguments() != null ? getArguments().getString("page") : "";
         }
 
         @Override

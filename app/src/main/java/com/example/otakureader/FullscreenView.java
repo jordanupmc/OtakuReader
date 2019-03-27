@@ -40,7 +40,7 @@ public class FullscreenView extends AppCompatActivity {
                 }
                 Collections.reverse(ChapterPOJOs);
 
-                final ChapterReaderAdapter mAdapter = new ChapterReaderAdapter(getSupportFragmentManager(), ChapterPOJOs);
+                final ChapterReaderPagerAdapter mAdapter = new ChapterReaderPagerAdapter(getSupportFragmentManager(), ChapterPOJOs);
                 final ViewPager mPager = findViewById(R.id.fullscreen_pager);
                 mPager.setAdapter(mAdapter);
             }

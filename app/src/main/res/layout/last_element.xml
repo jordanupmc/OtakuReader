@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:gravity="center"
+    android:background="@color/primaryTextColor">
 
     <Button
         android:id="@+id/nextChapterBtn"
@@ -11,8 +12,9 @@
         android:layout_height="wrap_content"
         android:text="Next chapter" />
 
+
     <ListView
         android:id="@+id/fs_view_chapter_list"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </LinearLayout>

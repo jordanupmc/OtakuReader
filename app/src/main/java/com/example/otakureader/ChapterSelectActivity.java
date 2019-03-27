@@ -1,27 +1,20 @@
 package com.example.otakureader;
 
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-
-import com.bumptech.glide.Glide;
-import com.example.otakureader.mangaeden.RetrofitBuilder;
-import com.example.otakureader.tools.adapters.ChapterAdapter;
-import com.example.otakureader.mangaeden.pojo.MangaPOJO;
-import com.example.otakureader.tools.Chapter;
-import com.github.chrisbanes.photoview.PhotoView;
-
-import androidx.appcompat.app.AppCompatActivity;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+import com.example.otakureader.mangaeden.RetrofitBuilder;
+import com.example.otakureader.mangaeden.pojo.MangaPOJO;
+import com.example.otakureader.tools.Chapter;
+import com.example.otakureader.tools.adapters.ChapterAdapter;
+import com.github.chrisbanes.photoview.PhotoView;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,6 +22,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
+
+import androidx.appcompat.app.AppCompatActivity;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import static com.example.otakureader.FullscreenView.CHAPTER_ID;
 
@@ -55,7 +53,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
                             int chapNb = Integer.parseInt(chaps.get(i).get(0));
 
                             String tmpDate = chaps.get(i).get(1);
-                            tmpDate = tmpDate.substring(0, tmpDate.length()-2)+"000";
+                            tmpDate = tmpDate.substring(0, tmpDate.length() - 2) + "000";
 
                             Date date = new Date(Long.parseLong(tmpDate));
                             SimpleDateFormat sdf;
@@ -87,7 +85,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
 
                         lv.setOnItemClickListener((adapterView, view, position, l) -> {
                             final Intent intent = new Intent(ChapterSelectActivity.this, FullscreenView.class);
-                            intent.putExtra(CHAPTER_ID,chapters.get(position).getId());
+                            intent.putExtra(CHAPTER_ID, chapters.get(position).getId());
                             startActivity(intent);
                         });
 
@@ -96,6 +94,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<MangaPOJO> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), "API CALL CHAPTER ERROR", Toast.LENGTH_LONG).show();
                         Log.e("FullScreenView", "API CALL CHAPTER ERROR");
                     }
                 });
