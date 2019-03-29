@@ -2,25 +2,19 @@ package com.example.otakureader;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.otakureader.mangaeden.RetrofitBuilder;
 import com.example.otakureader.mangaeden.pojo.MangaDetailPOJO;
-import com.example.otakureader.tools.adapters.ChapterAdapter;
 import com.example.otakureader.tools.Chapter;
-import com.github.chrisbanes.photoview.PhotoView;
-
-import androidx.appcompat.app.AppCompatActivity;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
+import com.example.otakureader.tools.adapters.ChapterAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,7 +23,13 @@ import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import androidx.appcompat.app.AppCompatActivity;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 import static com.example.otakureader.FullscreenView.CHAPTER_ID;
+import static com.example.otakureader.FullscreenView.CHAPTER_LIST;
 
 public class ChapterSelectActivity extends AppCompatActivity {
 
@@ -77,7 +77,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
                         ProgressBar pb = findViewById(R.id.chapProgressBar);
                         pb.setVisibility(View.GONE);
 
-                        final PhotoView imageView = findViewById(R.id.chapImage);
+                        final ImageView imageView = findViewById(R.id.chapImage);
                         imageView.setVisibility(View.VISIBLE);
                         Glide.with(ChapterSelectActivity.this).load(imageUrl).into(imageView);
 
@@ -87,6 +87,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
                         lv.setOnItemClickListener((adapterView, view, position, l) -> {
                             final Intent intent = new Intent(ChapterSelectActivity.this, FullscreenView.class);
                             intent.putExtra(CHAPTER_ID, chapters.get(position).getId());
+                            intent.putExtra(CHAPTER_LIST, (ArrayList<Chapter>) chapters);
                             startActivity(intent);
                         });
 

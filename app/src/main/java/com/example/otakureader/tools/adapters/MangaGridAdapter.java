@@ -3,20 +3,20 @@ package com.example.otakureader.tools.adapters;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.otakureader.R;
 import com.example.otakureader.mangaeden.pojo.MangaPOJO;
-import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MangaGridAdapter extends RecyclerView.Adapter<MangaGridAdapter.MyViewHolder>{
+public class MangaGridAdapter extends RecyclerView.Adapter<MangaGridAdapter.MyViewHolder> {
     public interface OnItemGridClickListener {
         void onItemClick(MangaPOJO item);
     }
@@ -32,7 +32,7 @@ public class MangaGridAdapter extends RecyclerView.Adapter<MangaGridAdapter.MyVi
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                     int viewType) {
+                                           int viewType) {
         context = parent.getContext();
         LinearLayout ll = (LinearLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.content_manga_grid, parent, false);
@@ -44,11 +44,11 @@ public class MangaGridAdapter extends RecyclerView.Adapter<MangaGridAdapter.MyVi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         MangaPOJO currentManga = mDataset.get(position);
-        String imgUrl = context.getString(R.string.api_image_url)  + currentManga.getImage();
-        PhotoView imageView = holder.getLinearLayout().findViewById(R.id.mangaImg);
+        String imgUrl = context.getString(R.string.api_image_url) + currentManga.getImage();
+        ImageView imageView = holder.getLinearLayout().findViewById(R.id.mangaImg);
         Glide.with(context).load(imgUrl).into(imageView);
 
-        TextView textView =  holder.getLinearLayout().findViewById(R.id.mangaTitle);
+        TextView textView = holder.getLinearLayout().findViewById(R.id.mangaTitle);
         textView.setText(currentManga.getTitle());
 
         holder.getLinearLayout().removeAllViews();
@@ -65,6 +65,7 @@ public class MangaGridAdapter extends RecyclerView.Adapter<MangaGridAdapter.MyVi
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout linearLayout;
+
         public MyViewHolder(LinearLayout v) {
             super(v);
             linearLayout = v;

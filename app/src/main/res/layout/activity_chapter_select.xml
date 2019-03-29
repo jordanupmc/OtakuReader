@@ -4,33 +4,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
-    tools:context=".ChapterSelectActivity">
+    tools:context=".ChapterSelectActivity"
+    android:orientation="horizontal">
 
-        <ProgressBar
-            android:id="@+id/chapProgressBar"
-            android:layout_width="match_parent"
+    <ProgressBar
+        android:id="@+id/chapProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:visibility="visible" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_margin="5dp"
+            android:id="@+id/chapImage"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:visibility="visible"/>
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
 
-        <LinearLayout
+        <ListView
+            android:id="@+id/chapListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
-                <com.github.chrisbanes.photoview.PhotoView
-                    android:layout_margin="5dp"
-                    android:id="@+id/chapImage"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
-                    android:visibility="gone"/>
-
-                <ListView
-                    android:id="@+id/chapListView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:visibility="gone"></ListView>
-        </LinearLayout>
+            android:visibility="gone"></ListView>
+    </LinearLayout>
 
 </LinearLayout>

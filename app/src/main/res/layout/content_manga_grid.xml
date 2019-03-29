@@ -7,15 +7,14 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MangaListActivity"
     android:orientation="vertical"
-    android:id="@+id/mangaGridItem"
-    >
+    android:id="@+id/mangaGridItem">
 
-    <com.github.chrisbanes.photoview.PhotoView
+    <ImageView
         android:layout_margin="5dp"
         android:id="@+id/mangaImg"
         android:layout_width="150dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"/>
+        android:layout_gravity="center_horizontal" />
 
     <TextView
         android:id="@+id/mangaTitle"
