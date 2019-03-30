@@ -7,7 +7,7 @@
     android:layout_gravity="center_vertical"
     android:background="@color/primaryLightColor">
 
-    <com.github.chrisbanes.photoview.PhotoView
+    <ImageView
         android:layout_margin="10dp"
         android:id="@+id/chapImage"
         android:layout_width="200dp"

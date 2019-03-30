@@ -24,7 +24,9 @@ import retrofit2.Response;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+
 import static com.example.otakureader.FullscreenView.CHAPTER_ID;
+import static com.example.otakureader.FullscreenView.CHAPTER_LIST;
 
 public class ChapterSelectActivity extends AppCompatActivity {
 
@@ -80,12 +82,12 @@ public class ChapterSelectActivity extends AppCompatActivity {
                                 return;
                             final Intent intent = new Intent(ChapterSelectActivity.this, FullscreenView.class);
                             intent.putExtra(CHAPTER_ID, chapters.get(position-1).getId());
+                            intent.putExtra(CHAPTER_LIST, (ArrayList<Chapter>) chapters);
                             startActivity(intent);
                         });
 
                         View v = getLayoutInflater().inflate(R.layout.chapter_detail_header, null, false);
-                        final PhotoView imageView = (PhotoView) v.findViewById(R.id.chapImage);
-                        imageView.setZoomable(false);
+                        final ImageView imageView = v.findViewById(R.id.chapImage);
                         imageView.setClickable(false);
                         Glide.with(ChapterSelectActivity.this).load(imageUrl).into(imageView);
 

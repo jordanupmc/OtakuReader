@@ -3,6 +3,7 @@ package com.example.otakureader.tools.adapters;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,7 +18,7 @@ import java.util.Random;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MangaGridAdapter extends RecyclerView.Adapter<MangaGridAdapter.MyViewHolder>{
+public class MangaGridAdapter extends RecyclerView.Adapter<MangaGridAdapter.MyViewHolder> {
     public interface OnItemGridClickListener {
         void onItemClick(MangaPOJO item);
     }
@@ -33,7 +34,7 @@ public class MangaGridAdapter extends RecyclerView.Adapter<MangaGridAdapter.MyVi
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent,
-                                                     int viewType) {
+                                           int viewType) {
         context = parent.getContext();
         LinearLayout ll = (LinearLayout) LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.content_manga_grid, parent, false);
@@ -46,8 +47,7 @@ public class MangaGridAdapter extends RecyclerView.Adapter<MangaGridAdapter.MyVi
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         MangaPOJO currentManga = mDataset.get(position);
         String imgUrl = "";
-        PhotoView imageView = holder.getLinearLayout().findViewById(R.id.mangaImg);
-        imageView.setZoomable(false);
+        ImageView imageView = holder.getLinearLayout().findViewById(R.id.mangaImg);
         if(currentManga.getImage() != null){
             imgUrl += context.getString(R.string.api_image_url) + currentManga.getImage();
         }else{
@@ -73,6 +73,7 @@ public class MangaGridAdapter extends RecyclerView.Adapter<MangaGridAdapter.MyVi
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         private LinearLayout linearLayout;
+
         public MyViewHolder(LinearLayout v) {
             super(v);
             linearLayout = v;

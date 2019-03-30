@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -21,7 +22,6 @@ import com.example.otakureader.tools.adapters.ChapterAdapter;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -31,14 +31,19 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 
 import static com.example.otakureader.FullscreenView.CHAPTER_ID;
+import static com.example.otakureader.FullscreenView.CHAPTER_LIST;
 
 public class ChapterReaderPagerAdapter extends FragmentStatePagerAdapter {
 
-    public List<String> imgUrl;
+    private List<String> imgUrl;
+    public static ArrayList<Chapter> chapters;
+    public static String chapterId;
 
-    public ChapterReaderPagerAdapter(final FragmentManager fm, final List<String> imgUrl) {
+    public ChapterReaderPagerAdapter(final FragmentManager fm, final List<String> imgUrl, ArrayList<Chapter> chapters, String chapterId) {
         super(fm);
         this.imgUrl = imgUrl;
+        ChapterReaderPagerAdapter.chapters = chapters;
+        ChapterReaderPagerAdapter.chapterId = chapterId;
     }
 
     @Override
@@ -55,8 +60,18 @@ public class ChapterReaderPagerAdapter extends FragmentStatePagerAdapter {
     }
 
     public static class LastPageFragment extends Fragment {
+
         static LastPageFragment newInstance() {
             return new LastPageFragment();
+        }
+
+        private int getIndNextChapter() {
+            for (int i = chapters.size() - 1; i >= 0; i--) {
+                if (chapters.get(i).getId().equals(chapterId)) {
+                    return i - 1 >= 0 ? i - 1 : -1;
+                }
+            }
+            return -1;
         }
 
         @Nullable
@@ -65,20 +80,36 @@ public class ChapterReaderPagerAdapter extends FragmentStatePagerAdapter {
             final View view = inflater.inflate(R.layout.last_element, container, false);
             final ListView listView = view.findViewById(R.id.fs_view_chapter_list);
 
-            final ArrayList<Chapter> data = new ArrayList<>(Arrays.asList(new Chapter("0", "date", "NI TITLE", "NOID"),
-                    new Chapter("1", "date", "NI TITLE", "NOID"),
-                    new Chapter("2", "date", "NI TITLE", "NOID")));
-            final ArrayAdapter<Chapter> adapter = new ChapterAdapter(view.getContext(), R.layout.content_chapter, data);
+            final ArrayAdapter<Chapter> adapter = new ChapterAdapter(view.getContext(), R.layout.content_chapter, ChapterReaderPagerAdapter.chapters);
+
             listView.setAdapter(adapter);
             final Button next = view.findViewById(R.id.nextChapterBtn);
+            final int nextChapterInd = getIndNextChapter();
+            next.setVisibility(View.VISIBLE);
+            if (nextChapterInd < 0) {
+                next.setVisibility(View.GONE);
+            }
             next.setOnClickListener(v -> {
                 final Intent intent = new Intent(getActivity(), FullscreenView.class);
-                //TODO
-                intent.putExtra(CHAPTER_ID, "4e711cb0c09225616d037cc2");
+                intent.putExtra(CHAPTER_ID, chapters.get(nextChapterInd).getId());
+                intent.putExtra(CHAPTER_LIST, chapters);
 
                 startActivity(intent);
                 getActivity().finish();
             });
+
+            listView.setOnItemClickListener((adapterView, v, position, l) -> {
+                final Intent intent = new Intent(v.getContext(), FullscreenView.class);
+                intent.putExtra(CHAPTER_ID, chapters.get(position).getId());
+                intent.putExtra(CHAPTER_LIST, chapters);
+                startActivity(intent);
+                getActivity().finish();
+            });
+
+            //TODO a revoir !
+            if (chapterId.equals(chapters.get(chapters.size() - 1).getId())) {
+                Toast.makeText(view.getContext(), "You have read all chapter ! Go take a break", Toast.LENGTH_SHORT).show();
+            }
             return view;
         }
     }

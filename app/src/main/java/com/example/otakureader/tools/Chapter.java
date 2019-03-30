@@ -1,6 +1,8 @@
 package com.example.otakureader.tools;
 
-public class Chapter {
+import java.io.Serializable;
+
+public class Chapter implements Serializable {
     private static int cpt = 0;
     private String number;
     private String date;
@@ -56,5 +58,7 @@ public class Chapter {
         this.id = id;
     }
 
-    public int getLocalId() { return this.localId;}
+    public int getLocalId() {
+        return this.localId;
+    }
 }
