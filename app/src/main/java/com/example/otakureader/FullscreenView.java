@@ -3,8 +3,8 @@ package com.example.otakureader;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.otakureader.mangaeden.RetrofitBuilder;
-import com.example.otakureader.mangaeden.pojo.ChapterPagesPOJO;
+import com.example.otakureader.api.RetrofitBuilder;
+import com.example.otakureader.api.pojo.ChapterPagesPOJO;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,7 +30,7 @@ public class FullscreenView extends AppCompatActivity {
     }
 
     private void getPagesFromChapter(String chapterId) {
-        RetrofitBuilder.getApi().getChapter(chapterId).enqueue(new Callback<ChapterPagesPOJO>() {
+        RetrofitBuilder.getMangaEdenApi().getChapter(chapterId).enqueue(new Callback<ChapterPagesPOJO>() {
             @Override
             public void onResponse(Call<ChapterPagesPOJO> call, Response<ChapterPagesPOJO> response) {
                 final List<String> ChapterPOJOs = new ArrayList<>();

@@ -2,32 +2,27 @@ package com.example.otakureader;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.bumptech.glide.Glide;
-import com.example.otakureader.mangaeden.RetrofitBuilder;
-import com.example.otakureader.mangaeden.pojo.MangaDetailPOJO;
-import com.example.otakureader.tools.adapters.ChapterAdapter;
-import com.example.otakureader.tools.Chapter;
-import com.github.chrisbanes.photoview.PhotoView;
-
+import android.util.Log;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import com.bumptech.glide.Glide;
+import com.example.otakureader.api.RetrofitBuilder;
+import com.example.otakureader.api.pojo.MangaDetailPOJO;
+import com.example.otakureader.tools.Chapter;
+import com.example.otakureader.tools.adapters.ChapterAdapter;
+import com.github.chrisbanes.photoview.PhotoView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-import android.util.Log;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.Toast;
-
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.TimeZone;
+import java.util.*;
 
 import static com.example.otakureader.FullscreenView.CHAPTER_ID;
 
@@ -45,7 +40,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
         Intent myIntent = getIntent();
         String mId = myIntent.getStringExtra(MANGA_ID);
 
-        RetrofitBuilder.getApi().getManga(mId).enqueue(
+        RetrofitBuilder.getMangaEdenApi().getManga(mId).enqueue(
                 new Callback<MangaDetailPOJO>() {
                     @Override
                     public void onResponse(Call<MangaDetailPOJO> call, Response<MangaDetailPOJO> response) {
@@ -77,18 +72,49 @@ public class ChapterSelectActivity extends AppCompatActivity {
                         ProgressBar pb = findViewById(R.id.chapProgressBar);
                         pb.setVisibility(View.GONE);
 
-                        final PhotoView imageView = findViewById(R.id.chapImage);
-                        imageView.setVisibility(View.VISIBLE);
-                        Glide.with(ChapterSelectActivity.this).load(imageUrl).into(imageView);
-
                         ListView lv = findViewById(R.id.chapListView);
                         lv.setVisibility(View.VISIBLE);
 
                         lv.setOnItemClickListener((adapterView, view, position, l) -> {
+                            if(position==0)
+                                return;
                             final Intent intent = new Intent(ChapterSelectActivity.this, FullscreenView.class);
-                            intent.putExtra(CHAPTER_ID, chapters.get(position).getId());
+                            intent.putExtra(CHAPTER_ID, chapters.get(position-1).getId());
                             startActivity(intent);
                         });
+
+                        View v = getLayoutInflater().inflate(R.layout.chapter_detail_header, null, false);
+                        final PhotoView imageView = (PhotoView) v.findViewById(R.id.chapImage);
+                        imageView.setZoomable(false);
+                        imageView.setClickable(false);
+                        Glide.with(ChapterSelectActivity.this).load(imageUrl).into(imageView);
+
+                        TextView title = v.findViewById(R.id.chapMangaTitle);
+                        title.setText(response.body().getTitle());
+
+                        TextView author = v.findViewById(R.id.chapMangaAuthor);
+                        author.setText(response.body().getAuthor());
+
+                        TextView desc = v.findViewById(R.id.chapMangaDesc);
+                        desc.setText(response.body().getDescription());
+
+                        ImageView expandButt = v.findViewById(R.id.descExpand);
+                        ImageView collapseButt = v.findViewById(R.id.descCollapse);
+
+                        expandButt.setOnClickListener(arg0 -> {
+                            desc.setSingleLine(false);
+                            collapseButt.setVisibility(View.VISIBLE);
+                            expandButt.setVisibility(View.GONE);
+                        });
+
+                        collapseButt.setOnClickListener(arg0 -> {
+                            desc.setLines(3);
+                            expandButt.setVisibility(View.VISIBLE);
+                            collapseButt.setVisibility(View.GONE);
+                        });
+
+
+                        lv.addHeaderView(v);
 
                         lv.setAdapter(adapter);
                     }

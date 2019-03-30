@@ -2,7 +2,7 @@ package com.example.otakureader.tools;
 
 import android.content.Context;
 
-import com.example.otakureader.mangaeden.pojo.MangaPOJO;
+import com.example.otakureader.api.pojo.MangaPOJO;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

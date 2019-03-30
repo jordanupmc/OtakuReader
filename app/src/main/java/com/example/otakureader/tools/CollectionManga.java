@@ -2,7 +2,7 @@ package com.example.otakureader.tools;
 
 import android.content.Context;
 
-import com.example.otakureader.mangaeden.pojo.MangaPOJO;
+import com.example.otakureader.api.pojo.MangaPOJO;
 
 import java.util.ArrayList;
 import java.util.Collection;

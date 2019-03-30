@@ -1,8 +1,8 @@
-package com.example.otakureader.mangaeden.interfaces;
+package com.example.otakureader.api.interfaces;
 
-import com.example.otakureader.mangaeden.pojo.ChapterPagesPOJO;
-import com.example.otakureader.mangaeden.pojo.MangaDetailPOJO;
-import com.example.otakureader.mangaeden.pojo.MangaListPOJO;
+import com.example.otakureader.api.pojo.ChapterPagesPOJO;
+import com.example.otakureader.api.pojo.MangaDetailPOJO;
+import com.example.otakureader.api.pojo.MangaListPOJO;
 
 import retrofit2.Call;
 import retrofit2.http.GET;

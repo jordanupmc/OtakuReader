@@ -53,7 +53,11 @@ public class ChapterAdapter extends ArrayAdapter<Chapter> {
         numberView.setText(String.valueOf(item.getNumber()));
 
         final TextView titleView = view.findViewById(R.id.chapTitle);
-        titleView.setText(item.getTitle());
+        if(item.getTitle()==null || item.getNumber().equals(item.getTitle())){
+            titleView.setText("Chapter "+item.getNumber());
+        }else {
+            titleView.setText(item.getTitle());
+        }
 
         final TextView dateView = view.findViewById(R.id.chapDate);
         dateView.setText(item.getDate());

@@ -1,4 +1,4 @@
-package com.example.otakureader.mangaeden.pojo;
+package com.example.otakureader.api.pojo;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

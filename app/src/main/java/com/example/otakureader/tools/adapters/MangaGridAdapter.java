@@ -8,10 +8,11 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.otakureader.R;
-import com.example.otakureader.mangaeden.pojo.MangaPOJO;
+import com.example.otakureader.api.pojo.MangaPOJO;
 import com.github.chrisbanes.photoview.PhotoView;
 
 import java.util.List;
+import java.util.Random;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -44,9 +45,16 @@ public class MangaGridAdapter extends RecyclerView.Adapter<MangaGridAdapter.MyVi
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         MangaPOJO currentManga = mDataset.get(position);
-        String imgUrl = context.getString(R.string.api_image_url)  + currentManga.getImage();
+        String imgUrl = "";
         PhotoView imageView = holder.getLinearLayout().findViewById(R.id.mangaImg);
+        imageView.setZoomable(false);
+        if(currentManga.getImage() != null){
+            imgUrl += context.getString(R.string.api_image_url) + currentManga.getImage();
+        }else{
+            imgUrl +=  context.getString(R.string.default_img_path)+ "default_image"+new Random().nextInt(10)+".jpg";
+        }
         Glide.with(context).load(imgUrl).into(imageView);
+
 
         TextView textView =  holder.getLinearLayout().findViewById(R.id.mangaTitle);
         textView.setText(currentManga.getTitle());
@@ -76,7 +84,7 @@ public class MangaGridAdapter extends RecyclerView.Adapter<MangaGridAdapter.MyVi
 
 
         public void bind(final MangaPOJO item, final OnItemGridClickListener listener) {
-            itemView.setOnClickListener(v -> listener.onItemClick(item));
+            linearLayout.setOnClickListener(v -> listener.onItemClick(item));
         }
     }
 }
