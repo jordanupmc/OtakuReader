@@ -1,7 +1,7 @@
 package com.example.otakureader.database;
 
-import com.example.otakureader.mangaeden.pojo.MangaDetailPOJO;
-import com.example.otakureader.mangaeden.pojo.MangaPOJO;
+import com.example.otakureader.api.pojo.MangaDetailPOJO;
+import com.example.otakureader.api.pojo.MangaPOJO;
 
 import java.util.ArrayList;
 import java.util.Arrays;

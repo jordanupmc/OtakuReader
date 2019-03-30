@@ -6,10 +6,11 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.otakureader.api.pojo.MangaPOJO;
-import com.example.otakureader.tools.CollectionManga;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+import com.example.otakureader.database.AppDatabase;
+import com.example.otakureader.database.Manga;
+import com.example.otakureader.database.dao.MangaDao;
+
+import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 
