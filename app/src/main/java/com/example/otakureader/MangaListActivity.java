@@ -35,7 +35,7 @@ public class MangaListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_manga_list);
 
 
-        RetrofitBuilder.getMangaEdenApi().getAllMangaList().enqueue(
+        RetrofitBuilder.getOtakuReaderApi().getTrendingList(null).enqueue(
                 new Callback<MangaListPOJO>() {
                     @Override
                     public void onResponse(Call<MangaListPOJO> call, Response<MangaListPOJO> response) {

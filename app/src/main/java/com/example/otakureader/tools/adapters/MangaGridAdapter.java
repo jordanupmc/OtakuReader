@@ -48,10 +48,10 @@ public class MangaGridAdapter extends RecyclerView.Adapter<MangaGridAdapter.MyVi
         MangaPOJO currentManga = mDataset.get(position);
         String imgUrl = "";
         ImageView imageView = holder.getLinearLayout().findViewById(R.id.mangaImg);
-        if(currentManga.getImage() != null){
-            imgUrl += context.getString(R.string.api_image_url) + currentManga.getImage();
-        }else{
+        if(currentManga.getImage() == null || currentManga.getImage().length() == 0){
             imgUrl +=  context.getString(R.string.default_img_path)+ "default_image"+new Random().nextInt(10)+".jpg";
+        }else{
+            imgUrl += context.getString(R.string.api_image_url) + currentManga.getImage();
         }
         Glide.with(context).load(imgUrl).into(imageView);
 
