@@ -5,7 +5,8 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     tools:context=".ChapterSelectActivity"
-    android:background="@color/primaryLightColor">
+    android:background="@color/primaryLightColor"
+    android:orientation="horizontal">
 
         <ProgressBar
             android:id="@+id/chapProgressBar"
@@ -13,11 +14,26 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             android:visibility="visible"/>
+  <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+      <Button
+        android:id="@+id/addMangaBtn"
+        android:text="Add to favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
+    <Button
+        android:id="@+id/removeMangaBtn"
+        android:text="Remove from favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+  </LinearLayout>
         <ListView
             android:id="@+id/chapListView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"></ListView>
+            android:visibility="gone" />
 
 </LinearLayout>

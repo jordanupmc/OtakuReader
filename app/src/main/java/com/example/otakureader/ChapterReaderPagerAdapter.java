@@ -53,10 +53,10 @@ public class ChapterReaderPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(final int position) {
-        if (position == imgUrl.size()) {
+        if (position == 0) {
             return LastPageFragment.newInstance();
         }
-        return ChapterPageFragment.newInstance(position, imgUrl.get(position));
+        return ChapterPageFragment.newInstance(position, imgUrl.get(position - 1));
     }
 
     public static class LastPageFragment extends Fragment {
@@ -74,6 +74,7 @@ public class ChapterReaderPagerAdapter extends FragmentStatePagerAdapter {
             return -1;
         }
 
+
         @Nullable
         @Override
         public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -82,20 +83,29 @@ public class ChapterReaderPagerAdapter extends FragmentStatePagerAdapter {
 
             final ArrayAdapter<Chapter> adapter = new ChapterAdapter(view.getContext(), R.layout.content_chapter, ChapterReaderPagerAdapter.chapters);
 
+
             listView.setAdapter(adapter);
+
             final Button next = view.findViewById(R.id.nextChapterBtn);
             final int nextChapterInd = getIndNextChapter();
+
             next.setVisibility(View.VISIBLE);
             if (nextChapterInd < 0) {
                 next.setVisibility(View.GONE);
             }
+            if (nextChapterInd > 0) {
+                listView.setSelection(nextChapterInd - 1);
+            }
+
             next.setOnClickListener(v -> {
                 final Intent intent = new Intent(getActivity(), FullscreenView.class);
                 intent.putExtra(CHAPTER_ID, chapters.get(nextChapterInd).getId());
                 intent.putExtra(CHAPTER_LIST, chapters);
 
                 startActivity(intent);
-                getActivity().finish();
+                if (getActivity() != null) {
+                    getActivity().finish();
+                }
             });
 
             listView.setOnItemClickListener((adapterView, v, position, l) -> {
@@ -103,11 +113,13 @@ public class ChapterReaderPagerAdapter extends FragmentStatePagerAdapter {
                 intent.putExtra(CHAPTER_ID, chapters.get(position).getId());
                 intent.putExtra(CHAPTER_LIST, chapters);
                 startActivity(intent);
-                getActivity().finish();
+                if (getActivity() != null) {
+                    getActivity().finish();
+                }
             });
 
             //TODO a revoir !
-            if (chapterId.equals(chapters.get(chapters.size() - 1).getId())) {
+            if (chapterId.equals(chapters.get(0).getId())) {
                 Toast.makeText(view.getContext(), "You have read all chapter ! Go take a break", Toast.LENGTH_SHORT).show();
             }
             return view;
