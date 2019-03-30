@@ -9,7 +9,6 @@ import com.example.otakureader.mangaeden.pojo.ChapterPagesPOJO;
 import com.example.otakureader.tools.Chapter;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -46,11 +45,10 @@ public class FullscreenView extends AppCompatActivity {
                 for (int i = 0; response.body().getImages() != null && i < response.body().getImages().size(); i++) {
                     pagesUrl.add(getBaseContext().getResources().getString(R.string.api_image_url) + response.body().getImages().get(i).get(1));
                 }
-                Collections.reverse(pagesUrl);
-
                 final ChapterReaderPagerAdapter mAdapter = new ChapterReaderPagerAdapter(getSupportFragmentManager(), pagesUrl, chapters, chapterId);
                 final ViewPager mPager = findViewById(R.id.fullscreen_pager);
                 mPager.setAdapter(mAdapter);
+                mPager.setCurrentItem(pagesUrl.size());
             }
 
             @Override

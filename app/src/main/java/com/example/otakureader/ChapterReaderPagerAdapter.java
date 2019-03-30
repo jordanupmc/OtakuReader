@@ -53,10 +53,10 @@ public class ChapterReaderPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(final int position) {
-        if (position == imgUrl.size()) {
+        if (position == 0) {
             return LastPageFragment.newInstance();
         }
-        return ChapterPageFragment.newInstance(position, imgUrl.get(position));
+        return ChapterPageFragment.newInstance(position, imgUrl.get(position - 1));
     }
 
     public static class LastPageFragment extends Fragment {
@@ -95,7 +95,9 @@ public class ChapterReaderPagerAdapter extends FragmentStatePagerAdapter {
                 intent.putExtra(CHAPTER_LIST, chapters);
 
                 startActivity(intent);
-                getActivity().finish();
+                if (getActivity() != null) {
+                    getActivity().finish();
+                }
             });
 
             listView.setOnItemClickListener((adapterView, v, position, l) -> {
@@ -103,7 +105,9 @@ public class ChapterReaderPagerAdapter extends FragmentStatePagerAdapter {
                 intent.putExtra(CHAPTER_ID, chapters.get(position).getId());
                 intent.putExtra(CHAPTER_LIST, chapters);
                 startActivity(intent);
-                getActivity().finish();
+                if (getActivity() != null) {
+                    getActivity().finish();
+                }
             });
 
             //TODO a revoir !
