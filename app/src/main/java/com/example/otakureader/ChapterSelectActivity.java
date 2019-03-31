@@ -108,7 +108,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
                             }
                             new AddChapterAsyncTask(
                                     AppDatabase.getAppDatabase(getApplicationContext()).chapterDao(),
-                                    new com.example.otakureader.database.Chapter(chapters.get(position).getId(), mId, false)).execute();
+                                    new com.example.otakureader.database.Chapter(chapters.get(position - 1).getId(), mId, false)).execute();
 
                             final Intent intent = new Intent(ChapterSelectActivity.this, FullscreenView.class);
                             intent.putExtra(CHAPTER_ID, chapters.get(position - 1).getId());
