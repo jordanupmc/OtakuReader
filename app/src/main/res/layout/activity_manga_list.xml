@@ -9,16 +9,12 @@
     android:background="@color/primaryColor"
     android:orientation="vertical">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar"/>
-
     <ProgressBar
         android:id="@+id/mangaListProgressBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:visibility="visible"/>
+        android:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/mangaGrid"
@@ -26,5 +22,5 @@
         android:layout_height="wrap_content"
         android:scrollbars="vertical"
         android:padding="5dp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 </LinearLayout>

@@ -5,15 +5,25 @@
     android:orientation="vertical"
     android:gravity="center">
 
-    <Button
-        android:id="@+id/btn_go_chapter_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Read" />
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
 
-    <TextView
-        android:id="@+id/tmpTvId"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="0sp"
+        android:id="@+id/content"
+        android:layout_weight="1" />
 
+    <com.google.android.material.bottomnavigation.BottomNavigationView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/navigation"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_gravity="bottom"
+        app:itemIconTint="@drawable/bottom_nav_icon_color_selector"
+        app:itemTextColor="@drawable/bottom_nav_icon_color_selector"
+        android:background="@color/secondaryColor"
+        app:menu="@menu/my_navigation_items" />
 </LinearLayout>

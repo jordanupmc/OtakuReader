@@ -1,62 +1,132 @@
 package com.example.otakureader;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.TextView;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
-import com.example.otakureader.database.AppDatabase;
-import com.example.otakureader.database.Manga;
-import com.example.otakureader.database.dao.MangaDao;
-
-import java.util.List;
+import com.example.otakureader.api.RetrofitBuilder;
+import com.example.otakureader.api.pojo.MangaPOJO;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
+import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.example.otakureader.ChapterSelectActivity.MANGA_ID;
 
 public class MainActivity extends AppCompatActivity {
-    public TextView tv;
+
+    FavorisFragment fav;
+    MangaListActivity mangaList;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        final Button read = findViewById(R.id.btn_go_chapter_view);
-        //getApplicationContext().deleteDatabase("user-database");
-        read.setOnClickListener(l -> {
-            final Intent intent = new Intent(this, MangaListActivity.class);
-            startActivity(intent);
-        });
-        tv = findViewById(R.id.tmpTvId);
-        new AgentAsyncTask(this
-                , AppDatabase.getAppDatabase(getApplicationContext()).mangaDao()).execute();
+        BottomNavigationView navigation = findViewById(R.id.navigation);
 
+        navigation.setSelectedItemId(R.id.action_favorite);
+        fav = new FavorisFragment();
+        showFragment(fav);
+
+        Toolbar myToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(myToolbar);
+
+        //TODO revoir efficacité
+        navigation.setOnNavigationItemSelectedListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.action_favorite:
+                    if (fav == null) {
+                        fav = new FavorisFragment();
+                    }
+                    showFragment(fav);
+                    return true;
+                case R.id.action_trending:
+                    if (mangaList == null) {
+                        mangaList = new MangaListActivity();
+                    }
+                    showFragment(mangaList);
+                    return true;
+            }
+            return false;
+        });
+
+        //getApplicationContext().deleteDatabase("user-database");
 
     }
 
-    private static class AgentAsyncTask extends AsyncTask<Void, Void, List<Manga>> {
-        private final MangaDao mDao;
-        private final MainActivity activity;
+    private void showFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.content, fragment)
+                .commit();
+    }
 
-        public AgentAsyncTask(MainActivity mainActivity, MangaDao mDao) {
-            this.mDao = mDao;
-            this.activity = mainActivity;
-        }
 
-        @Override
-        protected void onPostExecute(List<Manga> mangaList) {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < mangaList.size(); i++) {
-                sb.append(mangaList.get(i).title).append("\n");
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        MenuItem searchItem = menu.findItem(R.id.action_search);
+
+        SearchView searchView =
+                (SearchView) searchItem.getActionView();
+        searchView.setQueryHint("Search");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                RetrofitBuilder.getOtakuReaderApi().searchManga(query).enqueue(
+                        new Callback<MangaPOJO>() {
+                            @Override
+                            public void onResponse(Call<MangaPOJO> call, Response<MangaPOJO> response) {
+                                String searchId = response.body().getId();
+
+                                if (searchId != null) {
+                                    final Intent intent = new Intent(MainActivity.this, ChapterSelectActivity.class);
+                                    intent.putExtra(MANGA_ID, searchId);
+                                    startActivity(intent);
+                                } else {
+                                    searchView.clearFocus();
+                                    searchItem.collapseActionView();
+                                    Toast.makeText(getBaseContext(), "No Results Found", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<MangaPOJO> call, Throwable t) {
+                                Log.e("MangaListActivity", "API CALL SEARCH ERROR");
+                            }
+                        });
+                return false;
             }
-            activity.tv.setText(sb);
-        }
 
-        @Override
-        protected List<Manga> doInBackground(Void... voids) {
-            List<Manga> mangaList = mDao.getAll();
-            return mangaList;
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return true;
+            }
+        });
+
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_search:
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+
         }
     }
 }
