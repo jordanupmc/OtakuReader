@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.otakureader.api.RetrofitBuilder;
 import com.example.otakureader.api.pojo.MangaDetailPOJO;
 import com.example.otakureader.database.AppDatabase;
@@ -29,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.TimeZone;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -53,24 +56,11 @@ public class ChapterSelectActivity extends AppCompatActivity {
         Intent myIntent = getIntent();
         String mId = myIntent.getStringExtra(MANGA_ID);
 
-        Button saveBtn = findViewById(R.id.addMangaBtn);
-        Button removeBtn = findViewById(R.id.removeMangaBtn);
-        new MangaPresentAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).mangaDao(), mId, saveBtn, removeBtn).execute();
-
         RetrofitBuilder.getMangaEdenApi().getManga(mId).enqueue(
                 new Callback<MangaDetailPOJO>() {
                     @Override
                     public void onResponse(Call<MangaDetailPOJO> call, Response<MangaDetailPOJO> response) {
                         List<List<String>> chaps = response.body().getChapters();
-                        saveBtn.setOnClickListener(l -> {
-                            new SaveMangaAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).mangaDao(), getApplicationContext(), saveBtn, removeBtn,
-                                    Manga.convert(response.body(), mId)).execute();
-                        });
-                        removeBtn.setOnClickListener(l -> {
-                            new DeleteMangaAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).mangaDao(), getApplicationContext(), saveBtn, removeBtn,
-                                    Manga.convert(response.body(), mId)).execute();
-                        });
-
                         new GetChapterAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).chapterDao(), mId).execute();
 
                         for (int i = 0; i < chaps.size(); i++) {
@@ -89,7 +79,6 @@ public class ChapterSelectActivity extends AppCompatActivity {
                             String chapId = chaps.get(i).get(3);
                             chapters.add(new Chapter(chapNb, chapDate, chapTitle, chapId));
                         }
-                        String imageUrl = getString(R.string.api_image_url) + response.body().getImage();
 
                         final ArrayAdapter<Chapter> adapter = new ChapterAdapter(
                                 ChapterSelectActivity.this,
@@ -120,7 +109,14 @@ public class ChapterSelectActivity extends AppCompatActivity {
                         View v = getLayoutInflater().inflate(R.layout.chapter_detail_header, null, false);
                         final ImageView imageView = v.findViewById(R.id.chapImage);
                         imageView.setClickable(false);
-                        Glide.with(ChapterSelectActivity.this).load(imageUrl).into(imageView);
+
+                        String imageUrl = getString(R.string.api_image_url) + response.body().getImage();
+                        Glide.with(ChapterSelectActivity.this).load(imageUrl).placeholder(R.drawable.default_image).override(10, 10).into(imageView);
+
+                        ImageView saveBtn = v.findViewById(R.id.addMangaBtn);
+                        ImageView removeBtn = v.findViewById(R.id.removeMangaBtn);
+
+                        new MangaPresentAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).mangaDao(), mId, saveBtn, removeBtn).execute();
 
                         TextView title = v.findViewById(R.id.chapMangaTitle);
                         title.setText(response.body().getTitle());
@@ -146,6 +142,14 @@ public class ChapterSelectActivity extends AppCompatActivity {
                             collapseButt.setVisibility(View.GONE);
                         });
 
+                        saveBtn.setOnClickListener(l -> {
+                            new SaveMangaAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).mangaDao(), getApplicationContext(), saveBtn, removeBtn,
+                                    Manga.convert(response.body(), mId)).execute();
+                        });
+                        removeBtn.setOnClickListener(l -> {
+                            new DeleteMangaAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).mangaDao(), getApplicationContext(), saveBtn, removeBtn,
+                                    Manga.convert(response.body(), mId)).execute();
+                        });
 
                         lv.addHeaderView(v);
 
@@ -164,10 +168,10 @@ public class ChapterSelectActivity extends AppCompatActivity {
         private final MangaDao mDao;
         private final Context context;
         private final Manga manga;
-        private final Button saveBtn;
-        private final Button removeBtn;
+        private final ImageView saveBtn;
+        private final ImageView removeBtn;
 
-        public SaveMangaAsyncTask(MangaDao mDao, Context context, Button saveBtn, Button removeBtn, Manga manga) {
+        public SaveMangaAsyncTask(MangaDao mDao, Context context, ImageView saveBtn, ImageView removeBtn, Manga manga) {
             this.mDao = mDao;
             this.context = context;
             this.manga = manga;
@@ -235,10 +239,10 @@ public class ChapterSelectActivity extends AppCompatActivity {
         private final MangaDao mDao;
         private final Context context;
         private final Manga manga;
-        private final Button saveBtn;
-        private final Button removeBtn;
+        private final ImageView saveBtn;
+        private final ImageView removeBtn;
 
-        public DeleteMangaAsyncTask(MangaDao mDao, Context context, Button saveBtn, Button removeBtn, Manga manga) {
+        public DeleteMangaAsyncTask(MangaDao mDao, Context context, ImageView saveBtn, ImageView removeBtn, Manga manga) {
             this.mDao = mDao;
             this.context = context;
             this.manga = manga;
@@ -264,10 +268,10 @@ public class ChapterSelectActivity extends AppCompatActivity {
     private static class MangaPresentAsyncTask extends AsyncTask<Void, Void, Boolean> {
         private final MangaDao mDao;
         private final String id;
-        private final Button saveBtn;
-        private final Button removeBtn;
+        private final ImageView saveBtn;
+        private final ImageView removeBtn;
 
-        public MangaPresentAsyncTask(MangaDao mDao, String id, Button saveBtn, Button removeBtn) {
+        public MangaPresentAsyncTask(MangaDao mDao, String id, ImageView saveBtn, ImageView removeBtn) {
             this.mDao = mDao;
             this.id = id;
             this.saveBtn = saveBtn;

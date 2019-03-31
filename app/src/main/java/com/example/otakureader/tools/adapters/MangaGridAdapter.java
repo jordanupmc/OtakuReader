@@ -8,6 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.otakureader.ChapterSelectActivity;
 import com.example.otakureader.R;
 import com.example.otakureader.api.pojo.MangaPOJO;
 import com.github.chrisbanes.photoview.PhotoView;
@@ -48,13 +49,8 @@ public class MangaGridAdapter extends RecyclerView.Adapter<MangaGridAdapter.MyVi
         MangaPOJO currentManga = mDataset.get(position);
         String imgUrl = "";
         ImageView imageView = holder.getLinearLayout().findViewById(R.id.mangaImg);
-        if(currentManga.getImage() == null || currentManga.getImage().length() == 0){
-            imgUrl +=  context.getString(R.string.default_img_path)+ "default_image"+new Random().nextInt(10)+".jpg";
-        }else{
-            imgUrl += context.getString(R.string.api_image_url) + currentManga.getImage();
-        }
-        Glide.with(context).load(imgUrl).into(imageView);
-
+        imgUrl += context.getString(R.string.api_image_url) + currentManga.getImage();
+        Glide.with(context).load(imgUrl).placeholder(R.drawable.default_image).error(R.drawable.default_image).into(imageView);
 
         TextView textView =  holder.getLinearLayout().findViewById(R.id.mangaTitle);
         textView.setText(currentManga.getTitle());
