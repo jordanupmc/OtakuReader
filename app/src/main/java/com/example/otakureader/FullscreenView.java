@@ -3,6 +3,9 @@ package com.example.otakureader;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.otakureader.api.RetrofitBuilder;
@@ -68,9 +71,23 @@ public class FullscreenView extends AppCompatActivity {
                         if (position == 0) {
                             new UpdateChapterAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).chapterDao(),
                                     new com.example.otakureader.database.Chapter(chapterId, mangaId, true)).execute();
+                            if (chapterId.equals(chapters.get(0).getId())) {
+                                Toast.makeText(getApplicationContext(), "You have read all chapter ! Go take a break", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
                 });
+
+
+                Toast toast = new Toast(getApplicationContext());
+                LayoutInflater inflater = getLayoutInflater();
+                View layout = inflater.inflate(R.layout.toast_reading_indication,
+                        findViewById(R.id.custom_toast_layout_id));
+                toast.setView(layout);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.setDuration(Toast.LENGTH_SHORT);
+                toast.show();
+
             }
 
             @Override

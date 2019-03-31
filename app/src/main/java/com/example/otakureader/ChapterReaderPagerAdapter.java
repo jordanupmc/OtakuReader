@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.DataSource;
@@ -118,10 +117,6 @@ public class ChapterReaderPagerAdapter extends FragmentStatePagerAdapter {
                 }
             });
 
-            //TODO a revoir !
-            if (chapterId.equals(chapters.get(0).getId())) {
-                Toast.makeText(view.getContext(), "You have read all chapter ! Go take a break", Toast.LENGTH_SHORT).show();
-            }
             return view;
         }
     }
