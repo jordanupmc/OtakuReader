@@ -13,17 +13,15 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MangaListActivity"></activity>
+        <activity android:name=".MangaListActivity"/>
         <activity
-            android:name=".ChapterSelectActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:name=".ChapterSelectActivity"/>
         <activity
-            android:name=".FullscreenView"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".MainActivity">
+            android:name=".FullscreenView" />
+        <activity
+            android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
