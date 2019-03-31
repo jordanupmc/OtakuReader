@@ -111,7 +111,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
                         imageView.setClickable(false);
 
                         String imageUrl = getString(R.string.api_image_url) + response.body().getImage();
-                        Glide.with(ChapterSelectActivity.this).load(imageUrl).placeholder(R.drawable.default_image).override(10, 10).into(imageView);
+                        Glide.with(ChapterSelectActivity.this).load(imageUrl).placeholder(R.drawable.default_image).into(imageView);
 
                         ImageView saveBtn = v.findViewById(R.id.addMangaBtn);
                         ImageView removeBtn = v.findViewById(R.id.removeMangaBtn);
