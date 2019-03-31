@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
 import com.example.otakureader.api.pojo.MangaPOJO;
@@ -30,7 +31,7 @@ public class FavorisFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        final View view = inflater.inflate(R.layout.activity_manga_list, container, false);
+        final View view = inflater.inflate(R.layout.favoris_layout, container, false);
         new GetFavAsyncTask(view, AppDatabase.getAppDatabase(view.getContext()).mangaDao()).execute();
 
         return view;
@@ -65,7 +66,14 @@ public class FavorisFragment extends Fragment {
             ProgressBar pb = view.findViewById(R.id.mangaListProgressBar);
             pb.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
-
+            LinearLayout tv = view.findViewById(R.id.noContent);
+            if (mangaList.isEmpty()) {
+                view.findViewById(R.id.mangaListLayout).setVisibility(View.GONE);
+                tv.setVisibility(View.VISIBLE);
+            } else {
+                view.findViewById(R.id.mangaListLayout).setVisibility(View.VISIBLE);
+                tv.setVisibility(View.GONE);
+            }
 
         }
 
