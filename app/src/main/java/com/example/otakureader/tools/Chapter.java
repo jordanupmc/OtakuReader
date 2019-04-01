@@ -9,6 +9,7 @@ public class Chapter implements Serializable {
     private String title;
     private String id;
     private int localId;
+    private Boolean status;
 
     public Chapter(String number, String date, String title, String id) {
         this.number = number;
@@ -60,5 +61,13 @@ public class Chapter implements Serializable {
 
     public int getLocalId() {
         return this.localId;
+    }
+
+    public Boolean isStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 }

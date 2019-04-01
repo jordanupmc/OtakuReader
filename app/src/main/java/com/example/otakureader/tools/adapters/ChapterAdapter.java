@@ -42,7 +42,7 @@ public class ChapterAdapter extends ArrayAdapter<Chapter> {
     @Override
     public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         View view;
-        if (convertView == null){
+        if (convertView == null) {
             // Create new view
             LayoutInflater inflater = LayoutInflater.from(getContext());
             view = inflater.inflate(layout, null);
@@ -56,12 +56,22 @@ public class ChapterAdapter extends ArrayAdapter<Chapter> {
         numberView.setText(String.valueOf(item.getNumber()));
 
         final TextView titleView = view.findViewById(R.id.chapTitle);
-        if(item.getTitle()==null || item.getNumber().equals(item.getTitle())){
-            titleView.setText("Chapter "+item.getNumber());
-        }else {
+        if (item.getTitle() == null || item.getNumber().equals(item.getTitle())) {
+            titleView.setText("Chapter " + item.getNumber());
+        } else {
             titleView.setText(item.getTitle());
         }
 
+
+        if (item.isStatus() != null) {
+            if (item.isStatus()) {
+                //LECTURE FINI
+                view.setBackgroundColor(Color.DKGRAY);
+            } else {
+                //EN COURS DE LECTURE
+                view.setBackgroundColor(Color.LTGRAY);
+            }
+        }
         final TextView dateView = view.findViewById(R.id.chapDate);
         dateView.setText(item.getDate());
 

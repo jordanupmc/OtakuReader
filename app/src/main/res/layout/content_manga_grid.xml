@@ -5,12 +5,11 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".MangaListActivity"
+    tools:context=".MangaListFragment"
     android:orientation="vertical"
     android:id="@+id/mangaGridItem"
     android:background="@color/primaryColor"
-    android:layout_margin="5dp"
-    >
+    android:layout_margin="5dp">
 
     <ImageView
         android:id="@+id/mangaImg"
@@ -27,6 +26,6 @@
         android:layout_gravity="center_horizontal"
         android:textAlignment="center"
         android:textSize="15sp"
-        android:textColor="@color/primaryTextColor"/>
+        android:textColor="@color/primaryTextColor" />
 
 </LinearLayout>

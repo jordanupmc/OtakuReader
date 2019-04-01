@@ -25,7 +25,7 @@ import static com.example.otakureader.ChapterSelectActivity.MANGA_ID;
 public class MainActivity extends AppCompatActivity {
 
     FavorisFragment fav;
-    MangaListActivity mangaList;
+    MangaListFragment mangaList;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.action_trending:
                     if (mangaList == null) {
-                        mangaList = new MangaListActivity();
+                        mangaList = new MangaListFragment();
                     }
                     showFragment(mangaList);
                     return true;
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
 
                             @Override
                             public void onFailure(Call<MangaPOJO> call, Throwable t) {
-                                Log.e("MangaListActivity", "API CALL SEARCH ERROR");
+                                Log.e("MangaListFragment", "API CALL SEARCH ERROR");
                             }
                         });
                 return false;
