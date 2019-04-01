@@ -10,5 +10,5 @@
         android:bottom="1dp"/>
 
     <stroke android:width="3dp"
-        android:color="@color/secondaryTextColor"/>
+        android:color="@color/primaryTextColor"/>
 </shape>

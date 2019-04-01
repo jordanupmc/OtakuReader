@@ -181,7 +181,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void voids) {
-            Toast.makeText(context, "Successfully save to collection !", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Saved as Favorites !", Toast.LENGTH_SHORT).show();
             saveBtn.setVisibility(View.GONE);
             removeBtn.setVisibility(View.VISIBLE);
         }
@@ -252,7 +252,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(Void voids) {
-            Toast.makeText(context, "Successfully delete from collection !", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Deleted from Favorites !", Toast.LENGTH_SHORT).show();
             saveBtn.setVisibility(View.VISIBLE);
             removeBtn.setVisibility(View.GONE);
         }

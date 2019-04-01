@@ -81,7 +81,7 @@ public class ChapterReaderPagerAdapter extends FragmentStatePagerAdapter {
             final ListView listView = view.findViewById(R.id.fs_view_chapter_list);
 
             final ArrayAdapter<Chapter> adapter = new ChapterAdapter(view.getContext(), R.layout.content_chapter, ChapterReaderPagerAdapter.chapters);
-
+            ((ChapterAdapter) adapter).setCurrentChapterId(chapterId);
 
             listView.setAdapter(adapter);
 
