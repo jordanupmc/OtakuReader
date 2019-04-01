@@ -39,6 +39,7 @@ public class FavorisFragment extends Fragment {
 
     private static class GetFavAsyncTask extends AsyncTask<Void, Void, List<MangaPOJO>> {
         private final MangaDao mDao;
+        //TODO Weakref
         private final View view;
 
         public GetFavAsyncTask(View view, MangaDao mDao) {

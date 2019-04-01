@@ -71,7 +71,6 @@ public class ChapterSelectActivity extends AppCompatActivity {
                                     Manga.convert(response.body(), mId)).execute();
                         });
 
-                        new GetChapterAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).chapterDao(), mId).execute();
 
                         for (int i = 0; i < chaps.size(); i++) {
                             String chapNb = chaps.get(i).get(0);
@@ -101,6 +100,8 @@ public class ChapterSelectActivity extends AppCompatActivity {
 
                         ListView lv = findViewById(R.id.chapListView);
                         lv.setVisibility(View.VISIBLE);
+
+                        new GetChapterAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).chapterDao(), mId, adapter, lv).execute();
 
                         lv.setOnItemClickListener((adapterView, view, position, l) -> {
                             if (position == 0) {
@@ -145,8 +146,6 @@ public class ChapterSelectActivity extends AppCompatActivity {
                             expandButt.setVisibility(View.VISIBLE);
                             collapseButt.setVisibility(View.GONE);
                         });
-
-
                         lv.addHeaderView(v);
 
                         lv.setAdapter(adapter);
@@ -162,6 +161,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
 
     private static class SaveMangaAsyncTask extends AsyncTask<Void, Void, Void> {
         private final MangaDao mDao;
+        //TODO WeakRef
         private final Context context;
         private final Manga manga;
         private final Button saveBtn;
@@ -209,10 +209,15 @@ public class ChapterSelectActivity extends AppCompatActivity {
     private static class GetChapterAsyncTask extends AsyncTask<Void, Void, List<com.example.otakureader.database.Chapter>> {
         private final ChapterDao mDao;
         private final String mangaId;
+        private final ArrayAdapter<Chapter> adapter;
+        //TODO WeakRef
+        private ListView lv;
 
-        public GetChapterAsyncTask(ChapterDao mDao, String mId) {
+        public GetChapterAsyncTask(ChapterDao mDao, String mId, ArrayAdapter<Chapter> adapter, ListView lv) {
             this.mDao = mDao;
             this.mangaId = mId;
+            this.adapter = adapter;
+            this.lv = lv;
         }
 
         @Override
@@ -220,6 +225,15 @@ public class ChapterSelectActivity extends AppCompatActivity {
             if (chapters == null) {
                 return;
             }
+            for (int i = 0; i < adapter.getCount(); i++) {
+                String id = adapter.getItem(i).getId();
+                for (int j = 0; j < chapters.size(); j++) {
+                    if (chapters.get(j).id.equals(id)) {
+                        adapter.getItem(i).setStatus(chapters.get(j).readingComplete);
+                    }
+                }
+            }
+            adapter.notifyDataSetChanged();
             for (com.example.otakureader.database.Chapter c : chapters) {
                 Log.d("GET CHAPTER DEBUG", c.id + " " + c.manga + " " + c.readingComplete);
             }
@@ -233,6 +247,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
 
     private static class DeleteMangaAsyncTask extends AsyncTask<Void, Void, Void> {
         private final MangaDao mDao;
+        //TODO WeakRef
         private final Context context;
         private final Manga manga;
         private final Button saveBtn;

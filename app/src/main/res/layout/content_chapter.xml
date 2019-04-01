@@ -7,8 +7,7 @@
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".ChapterSelectActivity"
     tools:showIn="@layout/activity_chapter_select"
-    android:orientation="horizontal"
-    >
+    android:orientation="horizontal">
 
     <LinearLayout
         android:layout_margin="3dp"
@@ -16,6 +15,7 @@
         android:layout_height="match_parent"
         android:background="@drawable/circle_shape"
         android:gravity="center|end">
+
         <TextView
             android:gravity="center"
             android:id="@+id/chapNumber"
@@ -23,7 +23,7 @@
             android:layout_height="match_parent"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:textColor="@color/primaryTextColor"/>
+            android:textColor="@color/primaryTextColor" />
     </LinearLayout>
 
 
@@ -40,7 +40,7 @@
             android:textSize="20sp"
             android:textColor="@color/primaryTextColor"
             android:lines="1"
-            android:ellipsize="end"/>
+            android:ellipsize="end" />
 
         <TextView
             android:id="@+id/chapDate"
@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:textStyle="italic"
             android:textSize="15sp"
-            android:textColor="@color/primaryTextColor"/>
+            android:textColor="@color/primaryTextColor" />
     </LinearLayout>
 
 </LinearLayout>
