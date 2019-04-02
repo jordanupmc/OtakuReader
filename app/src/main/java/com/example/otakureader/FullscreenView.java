@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.SeekBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.otakureader.api.RetrofitBuilder;
@@ -29,6 +31,7 @@ public class FullscreenView extends AppCompatActivity {
 
     public static final String CHAPTER_ID = "Chapter_Id";
     public static final String CHAPTER_LIST = "Chapter_List";
+    private List<String> pagesUrl;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -36,8 +39,18 @@ public class FullscreenView extends AppCompatActivity {
         setContentView(R.layout.activity_fullscreen_view);
 
         Intent myIntent = getIntent();
+        if (savedInstanceState == null) {
+            getPagesFromChapter(myIntent.getStringExtra(CHAPTER_ID), myIntent.getStringExtra(MANGA_ID), (ArrayList<Chapter>) myIntent.getSerializableExtra(CHAPTER_LIST));
+        } else {
+            pagesUrl = savedInstanceState.getStringArrayList("imgUrl");
+            initView((ArrayList<Chapter>) myIntent.getSerializableExtra(CHAPTER_LIST), myIntent.getStringExtra(CHAPTER_ID), myIntent.getStringExtra(MANGA_ID), true);
+        }
+    }
 
-        getPagesFromChapter(myIntent.getStringExtra(CHAPTER_ID), myIntent.getStringExtra(MANGA_ID), (ArrayList<Chapter>) myIntent.getSerializableExtra(CHAPTER_LIST));
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putStringArrayList("imgUrl", (ArrayList<String>) pagesUrl);
     }
 
     private void getPagesFromChapter(String chapterId, String mangaId, ArrayList<Chapter> chapters) {
@@ -48,45 +61,12 @@ public class FullscreenView extends AppCompatActivity {
                     onFailure(call, new Exception());
                     return;
                 }
-                final List<String> pagesUrl = new ArrayList<>();
+                pagesUrl = new ArrayList<>();
 
                 for (int i = 0; response.body().getImages() != null && i < response.body().getImages().size(); i++) {
                     pagesUrl.add(getBaseContext().getResources().getString(R.string.api_image_url) + response.body().getImages().get(i).get(1));
                 }
-                final ChapterReaderPagerAdapter mAdapter = new ChapterReaderPagerAdapter(getSupportFragmentManager(), pagesUrl, chapters, chapterId);
-                final ViewPager mPager = findViewById(R.id.fullscreen_pager);
-                mPager.setAdapter(mAdapter);
-                mPager.setCurrentItem(pagesUrl.size());
-                mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-                    @Override
-                    public void onPageScrollStateChanged(int state) {
-                    }
-
-                    @Override
-                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                    }
-
-                    @Override
-                    public void onPageSelected(int position) {
-                        if (position == 0) {
-                            new UpdateChapterAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).chapterDao(),
-                                    new com.example.otakureader.database.Chapter(chapterId, mangaId, true)).execute();
-                            if (chapterId.equals(chapters.get(0).getId())) {
-                                Toast.makeText(getApplicationContext(), "You have read all chapter ! Go take a break", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }
-                });
-
-
-                Toast toast = new Toast(getApplicationContext());
-                LayoutInflater inflater = getLayoutInflater();
-                View layout = inflater.inflate(R.layout.toast_reading_indication,
-                        findViewById(R.id.custom_toast_layout_id));
-                toast.setView(layout);
-                toast.setGravity(Gravity.CENTER, 0, 0);
-                toast.setDuration(Toast.LENGTH_SHORT);
-                toast.show();
+                initView(chapters, chapterId, mangaId, false);
 
             }
 
@@ -96,6 +76,70 @@ public class FullscreenView extends AppCompatActivity {
                 finish();
             }
         });
+    }
+
+    private void initView(ArrayList<Chapter> chapters, String chapterId, String mangaId, boolean saved) {
+        final ChapterReaderPagerAdapter mAdapter = new ChapterReaderPagerAdapter(getSupportFragmentManager(), pagesUrl, chapters, chapterId);
+        final ViewPager mPager = findViewById(R.id.fullscreen_pager);
+
+        SeekBar sb = findViewById(R.id.seekBarPages);
+        TextView tv = findViewById(R.id.numPageTv);
+        tv.setText("0/" + (pagesUrl.size() - 1));
+        sb.setMax(pagesUrl.size());
+        sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if (fromUser) {
+                    mPager.setCurrentItem((pagesUrl.size()) - progress, true);
+                }
+                tv.setText(progress + "/" + pagesUrl.size());
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        mPager.setAdapter(mAdapter);
+        mPager.setCurrentItem(pagesUrl.size());
+        mPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    new UpdateChapterAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).chapterDao(),
+                            new com.example.otakureader.database.Chapter(chapterId, mangaId, true)).execute();
+                    if (chapterId.equals(chapters.get(0).getId())) {
+                        Toast.makeText(getApplicationContext(), "You have read all chapter ! Go take a break", Toast.LENGTH_SHORT).show();
+                    }
+                }
+                sb.setProgress((pagesUrl.size()) - position);
+                sb.refreshDrawableState();
+            }
+        });
+        if (!saved) {
+            Toast toast = new Toast(getApplicationContext());
+            LayoutInflater inflater = getLayoutInflater();
+            View layout = inflater.inflate(R.layout.toast_reading_indication,
+                    findViewById(R.id.custom_toast_layout_id));
+            toast.setView(layout);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.setDuration(Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
 
     private static class UpdateChapterAsyncTask extends AsyncTask<Void, Void, Void> {

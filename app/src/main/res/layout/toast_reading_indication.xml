@@ -7,6 +7,6 @@
 
     <ImageView
         android:src="@drawable/img_horizontal"
-        android:layout_width="100sp"
-        android:layout_height="100sp" />
+        android:layout_width="120sp"
+        android:layout_height="120sp" />
 </LinearLayout>
