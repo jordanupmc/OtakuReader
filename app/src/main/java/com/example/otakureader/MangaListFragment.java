@@ -26,7 +26,7 @@ import retrofit2.Response;
 
 import static com.example.otakureader.ChapterSelectActivity.MANGA_ID;
 
-public class MangaListActivity extends Fragment {
+public class MangaListFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
@@ -67,7 +67,7 @@ public class MangaListActivity extends Fragment {
 
                     @Override
                     public void onFailure(Call<MangaListPOJO> call, Throwable t) {
-                        Log.e("MangaListActivity", "API CALL LIST ERROR"+t);
+                        Log.e("MangaListFragment", "API CALL LIST ERROR");
                     }
                 });
         return view;

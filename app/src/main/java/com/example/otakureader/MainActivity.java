@@ -1,37 +1,24 @@
 package com.example.otakureader;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
-import com.example.otakureader.api.RetrofitBuilder;
-import com.example.otakureader.api.pojo.MangaListPOJO;
-import com.example.otakureader.api.pojo.MangaPOJO;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-
-import static com.example.otakureader.ChapterSelectActivity.MANGA_ID;
 
 public class MainActivity extends AppCompatActivity {
 
     FavorisFragment fav;
-    MangaListActivity mangaList;
     SearchFilterFragment searchList;
     BottomNavigationView navigation;
+    MangaListFragment mangaList;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -59,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 case R.id.action_trending:
                     if (mangaList == null) {
-                        mangaList = new MangaListActivity();
+                        mangaList = new MangaListFragment();
                     }
                     showFragment(mangaList);
                     return true;
