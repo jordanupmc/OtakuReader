@@ -1,12 +1,11 @@
 package com.example.otakureader.tools.adapters;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.otakureader.R;
@@ -62,24 +61,28 @@ public class ChapterAdapter extends ArrayAdapter<Chapter> {
             titleView.setText(item.getTitle());
         }
 
+        final ImageView imageView = view.findViewById(R.id.readingStatus);
 
         if (item.isStatus() != null) {
             if (item.isStatus()) {
                 //LECTURE FINI
-                view.setBackgroundColor(Color.DKGRAY);
+                imageView.setBackground(view.getResources().getDrawable(R.drawable.book_outline));
             } else {
                 //EN COURS DE LECTURE
-                view.setBackgroundColor(Color.LTGRAY);
+                imageView.setBackground(view.getResources().getDrawable(R.drawable.book_open_page_variant));
             }
+            imageView.setVisibility(View.VISIBLE);
+        } else {
+            imageView.setVisibility(View.INVISIBLE);
         }
         final TextView dateView = view.findViewById(R.id.chapDate);
         dateView.setText(item.getDate());
 
-        if(currentChapterId!=null && currentChapterId.equals(item.getId())){
+        if (currentChapterId != null && currentChapterId.equals(item.getId())) {
             numberView.setTextColor(view.getResources().getColor(R.color.secondaryTextColor));
             titleView.setTextColor(view.getResources().getColor(R.color.secondaryTextColor));
             dateView.setTextColor(view.getResources().getColor(R.color.secondaryTextColor));
-        }else{
+        } else {
             numberView.setTextColor(view.getResources().getColor(R.color.primaryTextColor));
             titleView.setTextColor(view.getResources().getColor(R.color.primaryTextColor));
             dateView.setTextColor(view.getResources().getColor(R.color.primaryTextColor));
@@ -89,7 +92,7 @@ public class ChapterAdapter extends ArrayAdapter<Chapter> {
 
     }
 
-    public void setCurrentChapterId(String id){
+    public void setCurrentChapterId(String id) {
         currentChapterId = id;
     }
 }
