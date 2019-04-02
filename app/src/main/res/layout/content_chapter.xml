@@ -30,7 +30,8 @@
     <LinearLayout
         android:layout_marginStart="5dp"
         android:orientation="vertical"
-        android:layout_width="fill_parent"
+        android:layout_width="0dp"
+        android:layout_weight="1"
         android:layout_height="wrap_content">
 
         <TextView
@@ -50,5 +51,14 @@
             android:textSize="15sp"
             android:textColor="@color/primaryTextColor" />
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/readingStatus"
+        android:layout_width="20dp"
+        android:layout_gravity="center"
+        android:layout_height="20dp"
+        android:backgroundTint="@color/primaryTextColor"
+        android:background="@drawable/book_open_page_variant"
+        android:visibility="invisible" />
 
 </LinearLayout>
