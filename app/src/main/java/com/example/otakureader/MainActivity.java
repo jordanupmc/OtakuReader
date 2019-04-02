@@ -8,8 +8,11 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.otakureader.api.RetrofitBuilder;
+import com.example.otakureader.api.pojo.MangaListPOJO;
 import com.example.otakureader.api.pojo.MangaPOJO;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.List;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -26,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
 
     FavorisFragment fav;
     MangaListActivity mangaList;
+    SearchFilterFragment searchList;
+
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -85,33 +90,22 @@ public class MainActivity extends AppCompatActivity {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                RetrofitBuilder.getOtakuReaderApi().searchManga(query).enqueue(
-                        new Callback<MangaPOJO>() {
-                            @Override
-                            public void onResponse(Call<MangaPOJO> call, Response<MangaPOJO> response) {
-                                String searchId = response.body().getId();
-
-                                if (searchId != null) {
-                                    final Intent intent = new Intent(MainActivity.this, ChapterSelectActivity.class);
-                                    intent.putExtra(MANGA_ID, searchId);
-                                    startActivity(intent);
-                                } else {
-                                    searchView.clearFocus();
-                                    searchItem.collapseActionView();
-                                    Toast.makeText(getBaseContext(), "No Results Found", Toast.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(Call<MangaPOJO> call, Throwable t) {
-                                Log.e("MangaListActivity", "API CALL SEARCH ERROR");
-                            }
-                        });
-                return false;
+                if (query.length()<3) {
+                    return false;
+                } else {
+                    searchList = SearchFilterFragment.newInstance(query);
+                    showFragment(searchList);
+                    return true;
+                }
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if(newText.length()>=3){
+                    searchView.setSubmitButtonEnabled(true);
+                }else{
+                    searchView.setSubmitButtonEnabled(false);
+                }
                 return true;
             }
         });

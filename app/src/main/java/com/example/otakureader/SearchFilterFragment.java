@@ -2,21 +2,18 @@ package com.example.otakureader;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import com.example.otakureader.api.RetrofitBuilder;
 import com.example.otakureader.api.pojo.MangaListPOJO;
 import com.example.otakureader.api.pojo.MangaPOJO;
 import com.example.otakureader.tools.adapters.MangaGridAdapter;
-
-import java.util.List;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,21 +21,43 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ProgressBar;
+
+import java.util.List;
+
 import static com.example.otakureader.ChapterSelectActivity.MANGA_ID;
 
-public class MangaListActivity extends Fragment {
+public class SearchFilterFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
     private List<MangaPOJO> mangas;
 
-    @Nullable
+    String search;
+
+    static SearchFilterFragment newInstance(final String search) {
+        final SearchFilterFragment f = new SearchFilterFragment();
+        final Bundle args = new Bundle();
+        args.putString("search", search);
+        f.setArguments(args);
+        return f;
+    }
+
+    @Override
+    public void onCreate(final Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        search = getArguments() != null ? getArguments().getString("search") : "";
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.activity_manga_list, container, false);
-
 
         RetrofitBuilder.getOtakuReaderApi().getTrendingList(null).enqueue(
                 new Callback<MangaListPOJO>() {
@@ -67,9 +86,10 @@ public class MangaListActivity extends Fragment {
 
                     @Override
                     public void onFailure(Call<MangaListPOJO> call, Throwable t) {
-                        Log.e("MangaListActivity", "API CALL LIST ERROR"+t);
+                        Log.e("MangaListActivity", "API CALL LIST ERROR");
                     }
                 });
         return view;
     }
+
 }
