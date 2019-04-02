@@ -1,5 +1,6 @@
 package com.example.otakureader;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -13,6 +14,7 @@ import com.google.android.material.snackbar.Snackbar;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -23,6 +25,8 @@ import retrofit2.Response;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -39,6 +43,7 @@ public class SearchFilterFragment extends Fragment {
     private List<MangaPOJO> mangas;
 
     String search;
+    MainActivity mainActivity;
 
     static SearchFilterFragment newInstance(final String search) {
         final SearchFilterFragment f = new SearchFilterFragment();
@@ -46,6 +51,13 @@ public class SearchFilterFragment extends Fragment {
         args.putString("search", search);
         f.setArguments(args);
         return f;
+    }
+
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mainActivity = (MainActivity)context;
     }
 
     @Override
@@ -58,8 +70,14 @@ public class SearchFilterFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
         final View view = inflater.inflate(R.layout.activity_manga_list, container, false);
+        ProgressBar pb = view.findViewById(R.id.mangaListProgressBar);
 
-        RetrofitBuilder.getOtakuReaderApi().getTrendingList(null).enqueue(
+        if(search.length() == 0) {
+            pb.setVisibility(View.GONE);
+            return view;
+        }
+
+        RetrofitBuilder.getOtakuReaderApi().searchMangaFilter(search).enqueue(
                 new Callback<MangaListPOJO>() {
                     @Override
                     public void onResponse(Call<MangaListPOJO> call, Response<MangaListPOJO> response) {
@@ -78,10 +96,11 @@ public class SearchFilterFragment extends Fragment {
 
                         recyclerView.setAdapter(mAdapter);
 
-                        ProgressBar pb = view.findViewById(R.id.mangaListProgressBar);
                         pb.setVisibility(View.GONE);
 
                         recyclerView.setVisibility(View.VISIBLE);
+
+                        search="";
                     }
 
                     @Override

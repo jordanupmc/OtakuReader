@@ -12,4 +12,9 @@
         android:id="@+id/action_trending"
         android:icon="@drawable/ic_fire"
         android:title="Trending" />
+
+    <item
+        android:id="@+id/action_search"
+        android:icon="@drawable/search"
+        android:title="Search" />
 </menu>

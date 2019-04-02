@@ -15,7 +15,7 @@ public interface IOtakuReaderApi {
     @GET("searchManga")
     Call<MangaPOJO> searchManga(@Query("title") String title);
 
-//    @GET("searchMangaFilter")
-//    Call<MangaListPOJO> searchMangaFilter(@Query("title") String title);
+    @GET("searchMangaFilter")
+    Call<MangaListPOJO> searchMangaFilter(@Query("title") String title);
 
 }
