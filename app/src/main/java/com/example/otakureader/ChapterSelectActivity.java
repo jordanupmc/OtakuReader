@@ -2,6 +2,7 @@ package com.example.otakureader;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -42,7 +43,8 @@ public class ChapterSelectActivity extends AppCompatActivity {
 
     public final static String MANGA_ID = "MANGA_ID";
 
-    private List<Chapter> chapters;
+    private ArrayList<Chapter> chapters;
+    private MangaDetailPOJO mangaDetail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,11 +54,31 @@ public class ChapterSelectActivity extends AppCompatActivity {
         Intent myIntent = getIntent();
         String mId = myIntent.getStringExtra(MANGA_ID);
 
+        if (savedInstanceState == null) {
+            getChaptersFromAPI(mId);
+        } else {
+            chapters = savedInstanceState.getParcelableArrayList("chapters");
+            mangaDetail = savedInstanceState.getParcelable("mangaDetail");
+            initView(mId, chapters, mangaDetail);
+        }
+
+
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("chapters", chapters);
+        outState.putParcelable("mangaDetail", mangaDetail);
+    }
+
+    private void getChaptersFromAPI(String mId) {
         RetrofitBuilder.getMangaEdenApi().getManga(mId).enqueue(
                 new Callback<MangaDetailPOJO>() {
                     @Override
                     public void onResponse(Call<MangaDetailPOJO> call, Response<MangaDetailPOJO> response) {
-                        List<List<String>> chaps = response.body().getChapters();
+                        mangaDetail = response.body();
+                        List<List<String>> chaps = mangaDetail.getChapters();
 
                         for (int i = 0; i < chaps.size(); i++) {
                             String chapNb = chaps.get(i).get(0);
@@ -98,7 +120,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
                             final Intent intent = new Intent(ChapterSelectActivity.this, FullscreenView.class);
                             intent.putExtra(CHAPTER_ID, chapters.get(position - 1).getId());
                             intent.putExtra(MANGA_ID, mId);
-                            intent.putExtra(CHAPTER_LIST, (ArrayList<Chapter>) chapters);
+                            intent.putExtra(CHAPTER_LIST, chapters);
                             startActivity(intent);
                         });
 
@@ -106,7 +128,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
                         final ImageView imageView = v.findViewById(R.id.chapImage);
                         imageView.setClickable(false);
 
-                        String imageUrl = getString(R.string.api_image_url) + response.body().getImage();
+                        String imageUrl = getString(R.string.api_image_url) +  mangaDetail.getImage();
                         Glide.with(ChapterSelectActivity.this).load(imageUrl).placeholder(R.drawable.default_image).into(imageView);
 
                         ImageView saveBtn = v.findViewById(R.id.addMangaBtn);
@@ -115,13 +137,13 @@ public class ChapterSelectActivity extends AppCompatActivity {
                         new MangaPresentAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).mangaDao(), mId, saveBtn, removeBtn).execute();
 
                         TextView title = v.findViewById(R.id.chapMangaTitle);
-                        title.setText(response.body().getTitle());
+                        title.setText(mangaDetail.getTitle());
 
                         TextView author = v.findViewById(R.id.chapMangaAuthor);
-                        author.setText(response.body().getAuthor());
+                        author.setText(mangaDetail.getAuthor());
 
                         TextView desc = v.findViewById(R.id.chapMangaDesc);
-                        desc.setText(response.body().getDescription());
+                        desc.setText(mangaDetail.getDescription());
 
                         ImageView expandButt = v.findViewById(R.id.descExpand);
                         ImageView collapseButt = v.findViewById(R.id.descCollapse);
@@ -140,11 +162,11 @@ public class ChapterSelectActivity extends AppCompatActivity {
 
                         saveBtn.setOnClickListener(l -> {
                             new SaveMangaAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).mangaDao(), getApplicationContext(), saveBtn, removeBtn,
-                                    Manga.convert(response.body(), mId)).execute();
+                                    Manga.convert(mangaDetail, mId)).execute();
                         });
                         removeBtn.setOnClickListener(l -> {
                             new DeleteMangaAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).mangaDao(), getApplicationContext(), saveBtn, removeBtn,
-                                    Manga.convert(response.body(), mId)).execute();
+                                    Manga.convert(mangaDetail, mId)).execute();
                         });
 
                         lv.addHeaderView(v);
@@ -159,6 +181,85 @@ public class ChapterSelectActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    private void initView(String mId, ArrayList<Chapter> chapters, MangaDetailPOJO mangaDetail) {
+        final ArrayAdapter<Chapter> adapter = new ChapterAdapter(
+                ChapterSelectActivity.this,
+                R.layout.content_chapter,
+                chapters);
+
+        ProgressBar pb = findViewById(R.id.chapProgressBar);
+        pb.setVisibility(View.GONE);
+
+        ListView lv = findViewById(R.id.chapListView);
+        lv.setVisibility(View.VISIBLE);
+        new GetChapterAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).chapterDao(), mId, adapter, lv).execute();
+
+        lv.setOnItemClickListener((adapterView, view, position, l) -> {
+            if (position == 0) {
+                return;
+            }
+            new AddChapterAsyncTask(
+                    AppDatabase.getAppDatabase(getApplicationContext()).chapterDao(),
+                    new com.example.otakureader.database.Chapter(chapters.get(position - 1).getId(), mId, false)).execute();
+
+            final Intent intent = new Intent(ChapterSelectActivity.this, FullscreenView.class);
+            intent.putExtra(CHAPTER_ID, chapters.get(position - 1).getId());
+            intent.putExtra(MANGA_ID, mId);
+            intent.putExtra(CHAPTER_LIST, chapters);
+            startActivity(intent);
+        });
+
+        View v = getLayoutInflater().inflate(R.layout.chapter_detail_header, null, false);
+        final ImageView imageView = v.findViewById(R.id.chapImage);
+        imageView.setClickable(false);
+
+        String imageUrl = getString(R.string.api_image_url) + mangaDetail.getImage();
+        Glide.with(ChapterSelectActivity.this).load(imageUrl).placeholder(R.drawable.default_image).into(imageView);
+
+        ImageView saveBtn = v.findViewById(R.id.addMangaBtn);
+        ImageView removeBtn = v.findViewById(R.id.removeMangaBtn);
+
+        new MangaPresentAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).mangaDao(), mId, saveBtn, removeBtn).execute();
+
+        TextView title = v.findViewById(R.id.chapMangaTitle);
+        title.setText(mangaDetail.getTitle());
+
+        TextView author = v.findViewById(R.id.chapMangaAuthor);
+        author.setText(mangaDetail.getAuthor());
+
+        TextView desc = v.findViewById(R.id.chapMangaDesc);
+        desc.setText(mangaDetail.getDescription());
+
+        ImageView expandButt = v.findViewById(R.id.descExpand);
+        ImageView collapseButt = v.findViewById(R.id.descCollapse);
+
+        expandButt.setOnClickListener(arg0 -> {
+            desc.setSingleLine(false);
+            collapseButt.setVisibility(View.VISIBLE);
+            expandButt.setVisibility(View.GONE);
+        });
+
+        collapseButt.setOnClickListener(arg0 -> {
+            desc.setLines(3);
+            expandButt.setVisibility(View.VISIBLE);
+            collapseButt.setVisibility(View.GONE);
+        });
+
+        saveBtn.setOnClickListener(l -> {
+            new SaveMangaAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).mangaDao(), getApplicationContext(), saveBtn, removeBtn,
+                    Manga.convert(mangaDetail, mId)).execute();
+        });
+        removeBtn.setOnClickListener(l -> {
+            new DeleteMangaAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).mangaDao(), getApplicationContext(), saveBtn, removeBtn,
+                    Manga.convert(mangaDetail, mId)).execute();
+        });
+
+        lv.addHeaderView(v);
+
+        lv.setAdapter(adapter);
+    }
+
 
     private static class SaveMangaAsyncTask extends AsyncTask<Void, Void, Void> {
         private final MangaDao mDao;

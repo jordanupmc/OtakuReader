@@ -1,10 +1,13 @@
 package com.example.otakureader.api.pojo;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class MangaPOJO {
+public class MangaPOJO implements Parcelable {
 
     @SerializedName("a")
     @Expose
@@ -38,6 +41,18 @@ public class MangaPOJO {
     @Expose
     private String title;
 
+    public MangaPOJO(Parcel in) {
+        this.alias = in.readString();
+        in.readStringList(this.category);
+        this.hits = in.readLong();
+        this.id = in.readString();
+        this.image = in.readString();
+        this.lastChapterDate = in.readDouble();
+        this.status = in.readLong();
+        this.title = in.readString();
+    }
+
+    public MangaPOJO() {}
 
     public String getAlias() {
         return alias;
@@ -102,4 +117,33 @@ public class MangaPOJO {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(alias);
+        dest.writeStringList(category);
+        dest.writeLong(hits);
+        dest.writeString(id);
+        dest.writeString(image);
+        dest.writeDouble(lastChapterDate);
+        dest.writeLong(status);
+        dest.writeString(title);
+    }
+
+    public static final Parcelable.Creator<MangaPOJO> CREATOR = new Parcelable.Creator<MangaPOJO>()
+    {
+        public MangaPOJO createFromParcel(Parcel in)
+        {
+            return new MangaPOJO(in);
+        }
+        public MangaPOJO[] newArray(int size)
+        {
+            return new MangaPOJO[size];
+        }
+    };
 }

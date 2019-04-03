@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<LinearLayout android:layout_width="match_parent"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/primaryColor"
-    android:orientation="vertical"
-    android:gravity="center">
+    tools:context=".SearchFilterFragment"
+    android:id="@+id/frag_search">
 
-    <include
-        android:id="@+id/mangaListLayout"
-        layout="@layout/activity_manga_list"
-        android:visibility="gone" />
+    <include layout="@layout/content_search_filter_fragment" />
 
     <LinearLayout
         android:id="@+id/noContent"
@@ -30,13 +26,14 @@
             android:textColor="@color/primaryTextColor"
             android:gravity="center"
             android:textSize="28sp"
-            android:text="No Content" />
+            android:text="No Results" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/primaryTextColor"
             android:gravity="center"
-            android:text="Add a manga to your favorites it will show up here" />
+            android:text="Do a research and the result will be display here" />
     </LinearLayout>
-</LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

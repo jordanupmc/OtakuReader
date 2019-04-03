@@ -123,7 +123,7 @@ public class FullscreenView extends AppCompatActivity {
                     new UpdateChapterAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).chapterDao(),
                             new com.example.otakureader.database.Chapter(chapterId, mangaId, true)).execute();
                     if (chapterId.equals(chapters.get(0).getId())) {
-                        Toast.makeText(getApplicationContext(), "You have read all chapter ! Go take a break", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "You have read all chapter ! Have a break !", Toast.LENGTH_SHORT).show();
                     }
                 }
                 sb.setProgress((pagesUrl.size()) - position);

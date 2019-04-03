@@ -13,7 +13,6 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".MangaListFragment" />
         <activity android:name=".ChapterSelectActivity" />
         <activity android:name=".FullscreenView" />
         <activity android:name=".MainActivity">

@@ -31,7 +31,7 @@ public class FavorisFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        final View view = inflater.inflate(R.layout.favoris_layout, container, false);
+        final View view = inflater.inflate(R.layout.fragment_favoris, container, false);
         new GetFavAsyncTask(view, AppDatabase.getAppDatabase(view.getContext()).mangaDao()).execute();
 
         return view;

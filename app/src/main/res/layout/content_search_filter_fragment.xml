@@ -8,6 +8,6 @@
 
     <include
         android:id="@+id/mangaListLayout"
-        layout="@layout/activity_manga_list"
+        layout="@layout/fragment_manga_list"
         android:visibility="visible" />
 </LinearLayout>

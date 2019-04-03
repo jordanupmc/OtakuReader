@@ -1,5 +1,6 @@
 package com.example.otakureader.api.pojo;
 
+import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -12,7 +13,7 @@ public class MangaListPOJO {
 
     @SerializedName("manga")
     @Expose
-    private List<MangaPOJO> mangas = null;
+    private ArrayList<MangaPOJO> mangas = null;
 
     @SerializedName("page")
     @Expose
@@ -34,11 +35,11 @@ public class MangaListPOJO {
         this.end = end;
     }
 
-    public List<MangaPOJO> getMangas() {
+    public ArrayList<MangaPOJO> getMangas() {
         return mangas;
     }
 
-    public void setMangas(List<MangaPOJO> mangas) {
+    public void setMangas(ArrayList<MangaPOJO> mangas) {
         this.mangas = mangas;
     }
 

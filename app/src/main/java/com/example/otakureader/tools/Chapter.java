@@ -1,8 +1,11 @@
 package com.example.otakureader.tools;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
-public class Chapter implements Serializable {
+public class Chapter implements Serializable, Parcelable {
     private static int cpt = 0;
     private String number;
     private String date;
@@ -17,6 +20,17 @@ public class Chapter implements Serializable {
         this.title = title;
         this.id = id;
         localId = cpt++;
+    }
+
+    public Chapter(Parcel in) {
+        number = in.readString();
+        date = in.readString();
+        title = in.readString();
+        id = in.readString();
+        localId = in.readInt();
+        boolean[] tmp = new boolean[1];
+        in.readBooleanArray(tmp);
+        status = tmp[0];
     }
 
     public static int getCpt() {
@@ -70,4 +84,32 @@ public class Chapter implements Serializable {
     public void setStatus(Boolean status) {
         this.status = status;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(number);
+        dest.writeString(date);
+        dest.writeString(title);
+        dest.writeString(id);
+        dest.writeInt(localId);
+        boolean[] tmp = new boolean[1];
+        tmp[0] = status;
+        dest.writeBooleanArray(tmp);
+    }
+
+    public static final Parcelable.Creator<Chapter> CREATOR = new Parcelable.Creator<Chapter>() {
+        public Chapter createFromParcel(Parcel in)
+        {
+            return new Chapter(in);
+        }
+        public Chapter[] newArray(int size)
+        {
+            return new Chapter[size];
+        }
+    };
 }

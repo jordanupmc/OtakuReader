@@ -40,7 +40,7 @@ public class RetrofitBuilder {
         if (otakuReaderApi == null) {
             otakuReaderApi = getOtakuReaderClient(OTAKU_READER_API_URL).create(IOtakuReaderApi.class);
         }
-        return otakuReaderApi;
+            return otakuReaderApi;
     }
 
     private static Retrofit getOtakuReaderClient(String baseUrl) {

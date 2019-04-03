@@ -4,8 +4,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.otakureader.tools.Chapter;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+
+import java.util.ArrayList;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
@@ -13,12 +16,15 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import static com.example.otakureader.ChapterSelectActivity.MANGA_ID;
+
 public class MainActivity extends AppCompatActivity {
 
     FavorisFragment fav;
     SearchFilterFragment searchList;
     BottomNavigationView navigation;
     MangaListFragment mangaList;
+    Fragment currentFragment = null;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -30,10 +36,17 @@ public class MainActivity extends AppCompatActivity {
         navigation.setSelectedItemId(R.id.action_favorite);
         fav = new FavorisFragment();
         searchList=new SearchFilterFragment();
-        showFragment(fav);
 
         Toolbar myToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(myToolbar);
+
+        if (savedInstanceState == null) {
+            showFragment(fav);
+        } else {
+            int frag = savedInstanceState.getInt("frag");
+            restaureFragment(frag);
+        }
+
 
         //TODO revoir efficacité
         navigation.setOnNavigationItemSelectedListener(item -> {
@@ -42,24 +55,45 @@ public class MainActivity extends AppCompatActivity {
                     if (fav == null) {
                         fav = new FavorisFragment();
                     }
+                    currentFragment = fav;
                     showFragment(fav);
                     return true;
                 case R.id.action_trending:
                     if (mangaList == null) {
                         mangaList = new MangaListFragment();
                     }
+                    currentFragment = mangaList;
                     showFragment(mangaList);
                     return true;
 
                 case R.id.action_search:
+                    currentFragment=searchList;
                     showFragment(searchList);
                     return true;
             }
             return false;
         });
 
-        //getApplicationContext().deleteDatabase("user-database");
+    }
 
+    protected void onSaveInstanceState(Bundle icicle) {
+        super.onSaveInstanceState(icicle);
+        icicle.putInt("frag", currentFragment == null ? fav.getId() : currentFragment.getId());
+    }
+
+    private void restaureFragment(int frag){
+        switch (frag) {
+            case R.id.frag_favoris:
+                showFragment(fav);
+                break;
+            case R.id.frag_list:
+                showFragment(mangaList);
+                break;
+
+            case R.id.frag_search:
+                showFragment(searchList);
+                break;
+        }
     }
 
     private void showFragment(Fragment fragment) {
