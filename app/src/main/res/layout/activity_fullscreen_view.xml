@@ -7,9 +7,16 @@
     android:background="@color/primaryColor"
     tools:context=".FullscreenView">
 
+    <com.example.otakureader.ViewPagerFixed
+        android:id="@+id/fullscreen_pager"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom">
 
         <TextView
             android:id="@+id/numPageTv"
@@ -28,11 +35,6 @@
             android:layout_height="wrap_content" />
 
     </LinearLayout>
-
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/fullscreen_pager"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
 
 </LinearLayout>
