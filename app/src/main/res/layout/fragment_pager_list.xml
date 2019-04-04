@@ -14,13 +14,13 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
 
-        <Button
+        <ImageView
             android:id="@+id/btnRefresh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:visibility="gone"
-            android:text="Refresh" />
+            android:src="@drawable/ic_refresh" />
 
         <com.github.chrisbanes.photoview.PhotoView
             android:id="@+id/imgShow"

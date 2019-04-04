@@ -113,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
         SearchView searchView =
                 (SearchView) searchItem.getActionView();
         searchView.setQueryHint("Search");
+        searchView.setMaxWidth(Integer.MAX_VALUE);
 
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override

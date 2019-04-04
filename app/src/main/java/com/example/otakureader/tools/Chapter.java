@@ -28,9 +28,6 @@ public class Chapter implements Serializable, Parcelable {
         title = in.readString();
         id = in.readString();
         localId = in.readInt();
-        boolean[] tmp = new boolean[1];
-        in.readBooleanArray(tmp);
-        status = tmp[0];
     }
 
     public static int getCpt() {
@@ -97,9 +94,6 @@ public class Chapter implements Serializable, Parcelable {
         dest.writeString(title);
         dest.writeString(id);
         dest.writeInt(localId);
-        boolean[] tmp = new boolean[1];
-        tmp[0] = status;
-        dest.writeBooleanArray(tmp);
     }
 
     public static final Parcelable.Creator<Chapter> CREATOR = new Parcelable.Creator<Chapter>() {

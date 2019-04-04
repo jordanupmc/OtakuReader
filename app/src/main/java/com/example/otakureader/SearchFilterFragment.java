@@ -61,6 +61,8 @@ public class SearchFilterFragment extends Fragment {
 
         if (search.length() == 0) {
             pb.setVisibility(View.GONE);
+            LinearLayout tv = view.findViewById(R.id.noContent);
+            tv.setVisibility(View.VISIBLE);
             return view;
         }
 

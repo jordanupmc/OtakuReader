@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
@@ -147,11 +148,13 @@ public class ChapterReaderPagerAdapter extends FragmentStatePagerAdapter {
             final View view = inflater.inflate(R.layout.fragment_pager_list, container, false);
             final PhotoView imageView = view.findViewById(R.id.imgShow);
             final ProgressBar progressBar = view.findViewById(R.id.pbChapterAdapter);
-            final Button btnRefresh = view.findViewById(R.id.btnRefresh);
+            final ImageView btnRefresh = view.findViewById(R.id.btnRefresh);
 
             progressBar.setVisibility(View.VISIBLE);
 
             btnRefresh.setOnClickListener(v -> {
+                progressBar.setVisibility(View.VISIBLE);
+                btnRefresh.setVisibility(View.GONE);
                 downloadImg(imageView, progressBar, btnRefresh);
             });
 
@@ -160,11 +163,12 @@ public class ChapterReaderPagerAdapter extends FragmentStatePagerAdapter {
 
         }
 
-        private void downloadImg(PhotoView imageView, ProgressBar progressBar, Button btnRefresh) {
+        private void downloadImg(PhotoView imageView, ProgressBar progressBar, ImageView btnRefresh) {
             Glide.with(this).load(mPage).listener(new RequestListener<Drawable>() {
 
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                    progressBar.setVisibility(View.GONE);
                     btnRefresh.setVisibility(View.VISIBLE);
                     return false;
                 }
