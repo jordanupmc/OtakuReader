@@ -27,14 +27,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import static com.example.otakureader.ChapterSelectActivity.MANGA_ID;
 
 public class FavorisFragment extends Fragment {
+    private View view;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        final View view = inflater.inflate(R.layout.fragment_favoris, container, false);
+        view = inflater.inflate(R.layout.fragment_favoris, container, false);
         new GetFavAsyncTask(view, AppDatabase.getAppDatabase(view.getContext()).mangaDao()).execute();
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        new GetFavAsyncTask(view, AppDatabase.getAppDatabase(view.getContext()).mangaDao()).execute();
     }
 
     private static class GetFavAsyncTask extends AsyncTask<Void, Void, List<MangaPOJO>> {
