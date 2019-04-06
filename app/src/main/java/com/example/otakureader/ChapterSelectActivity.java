@@ -45,6 +45,9 @@ public class ChapterSelectActivity extends AppCompatActivity {
 
     private ArrayList<Chapter> chapters;
     private MangaDetailPOJO mangaDetail;
+    private String mId;
+    private ArrayAdapter<Chapter> adapter;
+    private ListView lv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +55,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chapter_select);
         chapters = new ArrayList<>();
         Intent myIntent = getIntent();
-        String mId = myIntent.getStringExtra(MANGA_ID);
+        mId = myIntent.getStringExtra(MANGA_ID);
 
         if (savedInstanceState == null) {
             getChaptersFromAPI(mId);
@@ -61,8 +64,12 @@ public class ChapterSelectActivity extends AppCompatActivity {
             mangaDetail = savedInstanceState.getParcelable("mangaDetail");
             initView(mId, chapters, mangaDetail);
         }
+    }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        new GetChapterAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).chapterDao(), mId, adapter, lv).execute();
     }
 
     @Override
@@ -97,7 +104,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
                             chapters.add(new Chapter(chapNb, chapDate, chapTitle, chapId));
                         }
 
-                        final ArrayAdapter<Chapter> adapter = new ChapterAdapter(
+                        adapter = new ChapterAdapter(
                                 ChapterSelectActivity.this,
                                 R.layout.content_chapter,
                                 chapters);
@@ -105,7 +112,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
                         ProgressBar pb = findViewById(R.id.chapProgressBar);
                         pb.setVisibility(View.GONE);
 
-                        ListView lv = findViewById(R.id.chapListView);
+                        lv = findViewById(R.id.chapListView);
                         lv.setVisibility(View.VISIBLE);
                         new GetChapterAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).chapterDao(), mId, adapter, lv).execute();
 
@@ -183,7 +190,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
     }
 
     private void initView(String mId, ArrayList<Chapter> chapters, MangaDetailPOJO mangaDetail) {
-        final ArrayAdapter<Chapter> adapter = new ChapterAdapter(
+        adapter = new ChapterAdapter(
                 ChapterSelectActivity.this,
                 R.layout.content_chapter,
                 chapters);
@@ -191,7 +198,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
         ProgressBar pb = findViewById(R.id.chapProgressBar);
         pb.setVisibility(View.GONE);
 
-        ListView lv = findViewById(R.id.chapListView);
+        lv = findViewById(R.id.chapListView);
         lv.setVisibility(View.VISIBLE);
         new GetChapterAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).chapterDao(), mId, adapter, lv).execute();
 
@@ -324,7 +331,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(List<com.example.otakureader.database.Chapter> chapters) {
-            if (chapters == null) {
+            if (chapters == null || adapter == null) {
                 return;
             }
             for (int i = 0; i < adapter.getCount(); i++) {
