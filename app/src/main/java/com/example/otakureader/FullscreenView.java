@@ -1,6 +1,7 @@
 package com.example.otakureader;
 
 import android.content.Intent;
+import android.graphics.PorterDuff;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -37,6 +38,12 @@ public class FullscreenView extends AppCompatActivity {
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen_view);
+        SeekBar sb = findViewById(R.id.seekBarPages);
+
+        int colorSeekBar = getResources().getColor(R.color.secondaryTextColor);
+
+        sb.getProgressDrawable().setColorFilter(colorSeekBar, PorterDuff.Mode.SRC_IN);
+        sb.getThumb().setColorFilter(colorSeekBar, PorterDuff.Mode.SRC_IN);
 
         Intent myIntent = getIntent();
         if (savedInstanceState == null) {
@@ -83,13 +90,14 @@ public class FullscreenView extends AppCompatActivity {
         final ViewPager mPager = findViewById(R.id.fullscreen_pager);
 
         SeekBar sb = findViewById(R.id.seekBarPages);
+
         TextView tv = findViewById(R.id.numPageTv);
         tv.setText("0/" + (pagesUrl.size() - 1));
         sb.setMax(pagesUrl.size());
         sb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                if (fromUser) {
+                if (fromUser) { //Si l'utilisateur a changer la progression de la seekbar on change d'item, sinon c'est qu'un swipe a eu lieu on ne change donc pas de fragment
                     mPager.setCurrentItem((pagesUrl.size()) - progress, true);
                 }
                 tv.setText(progress + "/" + pagesUrl.size());
@@ -97,12 +105,10 @@ public class FullscreenView extends AppCompatActivity {
 
             @Override
             public void onStartTrackingTouch(SeekBar seekBar) {
-
             }
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-
             }
         });
 

@@ -2,7 +2,6 @@ package com.example.otakureader;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -69,7 +68,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        new GetChapterAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).chapterDao(), mId, adapter, lv).execute();
+        new GetChapterAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).chapterDao(), mId, adapter).execute();
     }
 
     @Override
@@ -114,7 +113,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
 
                         lv = findViewById(R.id.chapListView);
                         lv.setVisibility(View.VISIBLE);
-                        new GetChapterAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).chapterDao(), mId, adapter, lv).execute();
+                        new GetChapterAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).chapterDao(), mId, adapter).execute();
 
                         lv.setOnItemClickListener((adapterView, view, position, l) -> {
                             if (position == 0) {
@@ -135,7 +134,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
                         final ImageView imageView = v.findViewById(R.id.chapImage);
                         imageView.setClickable(false);
 
-                        String imageUrl = getString(R.string.api_image_url) +  mangaDetail.getImage();
+                        String imageUrl = getString(R.string.api_image_url) + mangaDetail.getImage();
                         Glide.with(ChapterSelectActivity.this).load(imageUrl).placeholder(R.drawable.default_image).into(imageView);
 
                         ImageView saveBtn = v.findViewById(R.id.addMangaBtn);
@@ -200,7 +199,7 @@ public class ChapterSelectActivity extends AppCompatActivity {
 
         lv = findViewById(R.id.chapListView);
         lv.setVisibility(View.VISIBLE);
-        new GetChapterAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).chapterDao(), mId, adapter, lv).execute();
+        new GetChapterAsyncTask(AppDatabase.getAppDatabase(getApplicationContext()).chapterDao(), mId, adapter).execute();
 
         lv.setOnItemClickListener((adapterView, view, position, l) -> {
             if (position == 0) {
@@ -319,14 +318,11 @@ public class ChapterSelectActivity extends AppCompatActivity {
         private final ChapterDao mDao;
         private final String mangaId;
         private final ArrayAdapter<Chapter> adapter;
-        //TODO WeakRef
-        private ListView lv;
 
-        public GetChapterAsyncTask(ChapterDao mDao, String mId, ArrayAdapter<Chapter> adapter, ListView lv) {
+        public GetChapterAsyncTask(ChapterDao mDao, String mId, ArrayAdapter<Chapter> adapter) {
             this.mDao = mDao;
             this.mangaId = mId;
             this.adapter = adapter;
-            this.lv = lv;
         }
 
         @Override
@@ -343,9 +339,6 @@ public class ChapterSelectActivity extends AppCompatActivity {
                 }
             }
             adapter.notifyDataSetChanged();
-            for (com.example.otakureader.database.Chapter c : chapters) {
-                Log.d("GET CHAPTER DEBUG", c.id + " " + c.manga + " " + c.readingComplete);
-            }
         }
 
         @Override

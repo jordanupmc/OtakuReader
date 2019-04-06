@@ -9,6 +9,8 @@
         android:id="@+id/nextChapterBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/secondaryLightColor"
+        android:textColor="@color/primaryTextColor"
         android:text="Next chapter" />
 
 
